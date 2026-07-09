@@ -91,6 +91,8 @@ COMPANIES: list[tuple[str, str, str]] = [
 # ──────────────────────── ENV LOADER ────────────────────────
 def load_env() -> dict[str, str]:
     env: dict[str, str] = {}
+    if not ENV_PATH.exists():
+        return env
     for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
@@ -250,7 +252,7 @@ def _parse_year_columns(soup) -> dict[int, int]:
         if header_row:
             for i, th in enumerate(header_row.find_all(["th", "td"])):
                 txt = th.get_text(strip=True)
-                m = re.match(r"Mar\s+(\d{4})", txt)
+                m = re.match(r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})", txt, re.I)
                 if m:
                     yr = int(m.group(1))
                     if 2000 <= yr <= 2030:
@@ -347,7 +349,7 @@ def fetch_apify(env: dict):
                     for k, v in ratio.items():
                         if k == "Metric":
                             continue
-                        m = re.match(r"Mar\s+(\d{4})", k)
+                        m = re.match(r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})", k, re.I)
                         if m and v is not None:
                             yr = int(m.group(1))
                             store(ticker, yr, "ROCE", v, "Apify")
@@ -359,7 +361,7 @@ def fetch_apify(env: dict):
                 for k, v in row.items():
                     if k == "Metric":
                         continue
-                    m = re.match(r"Mar\s+(\d{4})", k)
+                    m = re.match(r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})", k, re.I)
                     if m and v is not None:
                         yr = int(m.group(1))
                         bs_metrics[(metric, yr)] = v

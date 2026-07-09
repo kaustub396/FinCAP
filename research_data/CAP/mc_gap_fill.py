@@ -9,7 +9,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 from playwright.sync_api import sync_playwright
 
-CSV_PATH = Path(r"C:\Users\EV-Car\CAP\output\nifty_banknifty_ratios.csv")
+CSV_PATH = Path(__file__).resolve().parent / "output" / "nifty_banknifty_ratios.csv"
 YEAR_RANGE = range(2005, 2026)
 FIELDS = ["PE", "ROE", "ROCE", "Current_Ratio", "Debt_Equity"]
 BANK_TICKERS = {"AUBANK","AXISBANK","BANDHANBNK","BANKBARODA","CANBK",
@@ -117,7 +117,7 @@ def get_missing(data, ticker, fields_to_check):
 def _extract_years(texts):
     years = []
     for t in texts:
-        m = re.search(r"MAR[\s'\\-]*([0-9]{2,4})", t, re.I)
+        m = re.search(r"(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)[\s'\\-]*([0-9]{2,4})", t, re.I)
         if m:
             yr = int(m.group(1))
             years.append(yr + 2000 if yr < 100 else yr)
@@ -137,9 +137,24 @@ def _to_float(val):
         return None
 
 
+def find_mc_table(page, keywords):
+    table = page.query_selector("table.mctable1")
+    if table:
+        return table
+    tables = page.query_selector_all("table")
+    for t in tables:
+        try:
+            text = t.inner_text().lower()
+            if any(k in text for k in keywords):
+                return t
+        except:
+            pass
+    return None
+
+
 def parse_mc_table(page):
     """Extract ALL ratios from MC mctable1, including PE derived from Earnings Yield."""
-    table = page.query_selector("table.mctable1")
+    table = find_mc_table(page, ["indicators", "return on networth", "return on equity", "earnings yield", "current ratio"])
     if not table:
         return {}, []
     rows = table.query_selector_all("tr")
@@ -208,7 +223,7 @@ def _find_series(data: dict[str, dict[int, float]], keywords: list[str]) -> dict
 
 
 def parse_mc_statement_table(page):
-    table = page.query_selector("table.mctable1")
+    table = find_mc_table(page, ["equity capital", "total debt", "total borrowings", "total share capital", "shareholders funds", "net profit", "operating profit", "ebit", "profit before interest"])
     if not table:
         return {}, []
     rows = table.query_selector_all("tr")

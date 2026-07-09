@@ -5,8 +5,8 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-ENV_PATH = Path(r"C:\Users\EV-Car\CAP\env\.env")
-CSV_PATH = Path(r"C:\Users\EV-Car\CAP\output\nifty_banknifty_ratios.csv")
+ENV_PATH = Path(__file__).resolve().parent / "env" / ".env"
+CSV_PATH = Path(__file__).resolve().parent / "output" / "nifty_banknifty_ratios.csv"
 YEAR_RANGE = range(2005, 2026)
 
 # Load new API key

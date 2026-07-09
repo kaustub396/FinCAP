@@ -1,5 +1,6 @@
-import csv
-with open(r"C:\Users\EV-Car\CAP\output\nifty_banknifty_ratios.csv") as f:
+from pathlib import Path
+csv_path = Path(__file__).resolve().parent / "output" / "nifty_banknifty_ratios.csv"
+with open(csv_path, "r", encoding="utf-8") as f:
     rows = list(csv.DictReader(f))
 print(f"Total rows: {len(rows)}")
 print(f"Unique companies: {len(set(r['Company'] for r in rows))}")

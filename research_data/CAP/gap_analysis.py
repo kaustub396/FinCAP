@@ -1,7 +1,9 @@
 """Per-company gap analysis + identify broken MC slugs."""
 import csv
+from pathlib import Path
 
-rows = list(csv.DictReader(open(r"C:\Users\EV-Car\CAP\output\nifty_banknifty_ratios.csv")))
+csv_path = Path(__file__).resolve().parent / "output" / "nifty_banknifty_ratios.csv"
+rows = list(csv.DictReader(open(csv_path, "r", encoding="utf-8")))
 fields = ["PE","ROE","ROCE","Current_Ratio","Debt_Equity"]
 
 companies = {}
