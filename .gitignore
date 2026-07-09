@@ -48,7 +48,7 @@ venv.bak/
 .DS_Store
 
 # Datasets (DO NOT COMMIT LARGE FILES!)
-*.csv
+
 *.tsv
 *.dat
 *.parquet
