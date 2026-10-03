@@ -47,7 +47,7 @@ venv.bak/
 *.swo
 .DS_Store
 
-# Datasets (DO NOT COMMIT LARGE FILES!)
+# Datasets and Binary Panels
 *.csv
 *.tsv
 *.dat
@@ -57,8 +57,33 @@ venv.bak/
 *.db
 *.sqlite3
 *.jsonl
+*.pkl
+*.pickle
+*.xlsx
 /research_data/datasets/*
 !/research_data/datasets/.gitkeep
+research_data/Updated_Datasets/*
+
+# Model Weights and Checkpoints
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+*.ckpt
+ai_core/LLMs/*/*
+!ai_core/LLMs/LLMs.ipynb
+
+# LaTeX Build Artifacts
+*.aux
+*.bbl
+*.blg
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+documentation/*.zip
 
 # Logs
 logs
