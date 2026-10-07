@@ -1,0 +1,195 @@
+Fusing LLM Semantic Repair with Genetic Programming for Robust Alpha Discovery
+G.S.K. Raghav Anand • NIT India • IEEE Access manuscript
+Vanilla quant models break out-of-sample. A regime-aware GP + local-LLM repair loop fixes that — S&P 500 Sharpe decay cut from −35% to −7%, China’s from −92% to −47%, and no candidate
+tree is ever thrown away — the whole loop costs one monthly pass on a single workstation.
+10.6%
+net return (peak)
+0.65
+net Sharpe
+−7%
+S&P decay (was −35%)
++18%
+over quant ceiling
+NSE Nifty 50 2002–2025 (23 yrs) • validated on S&P 500 + SSE • costs 20+10 bps, cap INR 50 Cr • local Llama-3.2-3B + Gemma-2-2B, $0 inference • one monthly rebalance, judged and repaired in minutes
+1 Problem in 30 seconds
+▶Quant factors decay: top-1000 anomalies
+lose about 32% after publication; GP
+memorises noise.
+▶Old LLM+GP hybrids delete bad
+formulas and lose diversity.
+▶Fix: repair, don’t reject — rewrite only
+the truly nonsensical (score 2 or less).
+▶Deletion is expensive: a dropped tree takes
+its partial signal with it, and a thinner pool
+converges faster onto one lucky regime.
+▶Local 3B/2B models make the judge cheap
+enough to call every generation: $0 API
+cost, prompts never leave the workstation,
+latency fits the monthly rebalance.
+▶The claim stays narrow on purpose: repair
+lifts out-of-sample stability, not in-sample
+fit, and never widens the risk budget.
+2 What each layer does
+▶AFM (slow): news mood +
+PE/ROE/EPS/BV gives a bull/bear prior,
+an economic compass. It drifts over weeks,
+so one noisy headline never flips the prior.
+▶HMM (fast): 2-state volatility filter.
+Calm goes to trend formulas; turbulence
+to reversals + quality. Baum–Welch learns
+the transitions; Viterbi decodes today’s
+state once a day.
+▶GP (inventor): 500 trees, depth max 6,
+Sharpe minus complexity fitness. The
+parsimony term prices in every node, so
+bloat is charged from generation one.
+▶LLM (editor): Llama rates economics
+1–5; Gemma rewrites failures from a
+closed vocabulary — at most L ≤5 typed
+edits, so a rewrite can never invent a data
+source that does not exist.
+▶Guards: every repaired tree must compile
+through the AST check and pass validation
+ranges before it re-enters the pool; a
+rewrite that fails never replaces its parent.
+▶Settings: AFM FinBERT threshold
+τ = 0.5; HMM 2-state Baum–Welch +
+Viterbi; GP pop 500, depth max 6; edit list
+L ≤5; dollar-neutral top/bottom-15%,
+monthly rebalance. The identical setup
+runs on Nifty, S&P and SSE — nothing is
+retuned per market.
+2b Loop + stability (how it runs, why it holds)
+GP loop: AFM prior + HMM state →fitness (Sharpe −complexity)
+→Llama judge (1–5) →Gemma repair (S ≤2, closed vocab, L ≤5)
+→recompile, back into evolution. Trees scoring 3–5 pass untouched,
+so the editor spends compute only where the economics is broken. Zero
+attrition: every repair compiles, the pool never drops below its 500 trees,
+and nothing is discarded for looking unusual — only for scoring low.
+Rolling-window Sharpe stays positive (0.855) in turbulent 2017–20 where momentum + trend turn negative. Regime
+specialists, not one average model: every rolling window is judged on its own regime, so a calm 2013–16 never has to
+average out a hostile 2017–20.
+3 System architecture (paper Fig. 1, middle)
+Left half mines candidates from data + regimes; the right half repairs — never deletes — what the
+economics judge rejects; the lower panels fuse the signals and execute the portfolio.
+Figure 1. Dual two-stage framework: (1) regime-aware factor engine (AFM macro + HMM states + regime GP) and (2)
+post-evolution Two-Stage LLM Refiner (Llama-3B judge, Gemma-2B closed-vocab repair) with AST + validation guards.
+The four quadrants walk the same path as the numbers below: mine, judge, repair, then build the dollar-neutral book.
+▶Top-left: multi-regime data in; GP evolution mines a specialist pool
+per regime.
+▶Top-right: judge, then repair — the two-stage refiner this poster is
+about.
+▶Bottom row: signals fused with the AFM/HMM state, sized, costs
+applied, portfolio out.
+4 Decay cut in half (Sharpe)
+Out-of-sample Sharpe against the in-sample peak,
+three engines
+per
+market:
+the
+more
+structure
+that
+survives
+the
+test
+win-
+dow,
+the less Sharpe bleeds away.
+Conditioning helps,
+repair-
+ing helps more, and together they leave both markets tradable.
+Market / engine
+OOS Sharpe
+Decay
+S&P Vanilla GP
+0.905
+-35.03%
+S&P HMM-GP
+0.974
+-20.71%
+S&P LLM-GP (ours)
+1.075
+-6.77%
+SSE Vanilla GP
+0.035
+-92.08%
+SSE HMM-GP
+0.232
+-63.28%
+SSE LLM-GP (ours)
+0.067
+-46.68%
+S&P decay -35.03% to -6.77%; China -92.08% to -46.68%. Vanilla GP overfits its training window, conditioning on the
+regime removes part of the damage, and semantic repair removes the rest — all without deleting trees. On the SSE the
+level (0.067) stays small, so the honest claim there is halved decay, not a large Sharpe.
+5
+What
+the
+machine
+rediscovers
+(feature mix)
+Feature mix of top alphas (paper Fig. 6): intermediate momentum +
+volatility scalers dominate. Each bar counts appearances of that feature in the
+top-ranked formulas: a trend term you can hold in calm regimes plus a scaler
+that trims size when vol rises, with reversals + quality for stress. The
+categories stay classical (trend, momentum, volatility, quality), so every
+repaired formula still reads like something a desk would write. Because the
+inputs stay classical, the repair step can never smuggle in data the GP never
+saw.
+6
+Read
+this
+and
+leave
+(5-min
+summary)
+▶Robust every year: positive Sharpe
+2019–25 incl. COVID (-14.8% DD vs
+-38.5% momentum).
+▶Deployable: about $250M capacity;
+20+10 bps costs priced in, INR 50 Cr cap.
+▶Cheap to run: one monthly pass on a
+single workstation — local 3B/2B models,
+no cloud API, $0 inference.
+▶Where it wins: decay control — S&P
+keeps 93% of its backtest Sharpe, SSE
+keeps about half instead of a tenth.
+▶Honest limits: the SSE level (0.067) is
+still small, and transfer is tested on one US
+plus one Chinese index.
+▶Next: NSE 500, LoRA-Gemma,
+multi-agent judges.
+Take-away: semantic repair is a free
+regulariser, India to US to China, at
+zero inference cost.
+7 Repair example + wealth curve +
+regimes (one glance)
+Before (1/5):
+add(log(vol_5d), sin(p_to_sma20)) —
+sine on prices is noise: it oscillates with no
+economic channel, so it fits one window and
+dies in the next.
+After (4/5):
+div(ret_20d,
+ts_mean(vol_20d,20)) — return scaled by its own
+trailing volatility: risk-adjusted momentum,
+the line a quant desk would write by hand.
+Rank IC −0.012 →+0.038; 100% repairs
+compile, zero crashes over 1,729 days. Both
+edits stay inside the original operator set, so
+no new primitive has to be back-tested.
+Wealth 2019–25 compounds through
+bull + bear while a plain momentum
+book gives back −40.65% at its
+worst.
+HMM: State 0 calm expansion vs
+State 1 turbulence (COVID-2020,
+tightening-2022); stickiness
+0.994/0.983 — the model rarely flips
+states, so the routing signal stays
+stable.
+Repair turns nonsense into economics; regime routing is why wealth survives
+shocks. Read together: cleaner operators on top, regime-aware routing below,
+one smooth equity curve at the end.
+Refs: Kakushadze 101 Alphas (2016) • AlphaAgent arXiv:2502.16789 • TEDE (2026) • DEAP JMLR • Hamilton (1989) McLean (2016) • Almgren–Chriss (2000). NSE 50 2002–25; S&P 500 + SSE transfer test. Draft 1 (poster.pdf) is the full version behind every number shown above.

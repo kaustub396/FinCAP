@@ -76,96 +76,109 @@ Key observations:
 ```
 FinCAP/
 ├── README.md                          # Project documentation
-├── .gitignore                         # Git exclusion rules for large files
-├── requirements.txt                   # Environment dependencies
+├── requirements.txt                   # Backend dependencies
 │
 ├── ai_core/                           # Core algorithmic pipeline
-│   ├── gp/                            # Genetic programming engine and experiment runners
-│   │   ├── gp_engine.py               # Tree representation, operators, and ICIR fitness
-│   │   ├── regime_gp.py               # HMM regime routing logic
-│   │   ├── final_experiments.py       # Main experiment script (GP + LLM refiner loop)
-│   │   ├── evaluation.py              # Performance evaluation (Sharpe, IC, Drawdown)
-│   │   └── baselines.py               # Benchmark factor implementations
-│   ├── llm_refiner/                   # Two-Stage LLM Semantic Refiner
-│   │   └── llm_refiner.py             # Stage 1 scoring and Stage 2 AST-constrained mutation
-│   ├── regimes/                       # Market regime modeling
-│   │   └── regime_detector.py         # 2-state Gaussian HMM implementation
-│   ├── afm/                           # Adaptive Fusion Model
-│   │   └── extract_afm_data.py        # Macro news sentiment and fundamental ratio fusion
-│   └── LLMs/                          # Local model setup
-│       └── LLMs.ipynb                 # Weight download and testing notebook
+│   ├── stock_model.py                 # DataProcessor + GPAlphaEngine + HMM regime fit
+│   ├── train_regime.py                # HMM regime fit
+│   ├── train_gp.py                    # GP evolution loop
+│   ├── refine.py                      # Two-stage semantic refinement (judge + mutator)
+│   ├── evaluate.py                    # OOS evaluation (Sharpe, IC, Drawdown)
+│   ├── index.py                       # Index frame construction
+│   ├── features.py                    # Feature engineering
+│   └── LLMs/                          # Local model setup (weights gitignored)
+│       └── LLMs.ipynb                 # Weight download & testing notebook
 │
-├── research_data/                     # Data acquisition and preprocessing
-│   ├── download_data.py               # Raw market data extraction (Nifty 50, S&P 500, SSE)
-│   ├── standardize_data.py            # Data cleaning and corporate action adjustments
-│   └── build_features.py              # Technical indicator panel computation
+├── backend/                           # FastAPI + dashboard backend
+│   ├── app/
+│   │   ├── main.py                    # FastAPI app + static mount of frontend/dist
+│   │   ├── pipeline.py                # Orchestration: HMM → GP → val IC gate → refine → ensemble OOS
+│   │   ├── synthetic.py               # Synthetic demo panel + fixtures (demo fallback)
+│   │   └── config.py                  # Paths, modes, LLM-availability flag
+│   ├── requirements.txt
+│   └── results.json                   # Generated run results (restored at startup)
 │
-├── backend/                           # Backend API services
-├── frontend/                          # Web application interface
+├── frontend/                          # React 18 + Vite + Recharts dashboard
+│   ├── src/pages/                     # Overview, Pipeline, Formulas, Regimes, Data
+│   ├── package.json
+│   └── vite.config.js                 # /api proxy → backend
 │
-└── documentation/                     # Academic paper draft and diagrams
-    ├── access.tex                     # IEEE Access LaTeX manuscript (12 pages)
-    ├── access.pdf                     # Compiled paper PDF
-    └── *.png                          # Architecture and ablation plots
+├── research_data/                     # Data acquisition & preprocessing (gitignored)
+│   ├── scripts/                       # Raw extraction, standardization, feature building
+│   └── processed/                     # Panel .pkl/.csv + coverage_ratios.csv (PLACEHOLDERS)
+│
+├── documentation/                     # Paper drafts
+│   ├── ACCESS_latex_template_20240429/access.tex + access.pdf
+│   └── Architecture/ablation diagrams
+│
+└── â”œâ”€â”€ .gitignore
+â””â”€â”€ scripts/
+    â”œâ”€â”€ check_weights.py        # LLM weight verification (see §3)
+
 ```
 
 ---
 
-## Setup and Reproduction
+## Setup & reproduction (this workspace)
 
-### 1. Environment Setup
-
-Python 3.10 or higher is required.
-
-```bash
-git clone https://github.com/kaustub396/FinCAP.git
-cd FinCAP
-
-python -m venv venv
-# On Windows:
-venv\Scripts\activate
-# On Linux/macOS:
-source venv/bin/activate
-
-pip install -r requirements.txt
+### 1. Dependencies
+```powershell
+pip install -r requirements.txt     # deap, hmmlearn (+ numpy/pandas/torch-CPU/transformers)
 ```
 
-### 2. Download Model Weights
+### 2. Models (optional — upgrades the judge)
+Run `ai_core/LLMs/LLMs.ipynb` to download quantized weights locally under `ai_core/LLMs/`
+(gitignored). When the weight dir exists, `GET /api/health` reports `llm_weights_available: true`
+and the LLM judge activates; otherwise the rule-based judge runs.
 
-The LLM refiners run locally using open-weights models (no external API calls required). Open and run `ai_core/LLMs/LLMs.ipynb` to download the quantized weights for:
-- `Qwen/Qwen2.5-3B-Instruct` (or `meta-llama/Llama-3.2-3B-Instruct`)
-- `google/gemma-2-2b-it`
+### 3. Upload your weights (optional — zero-config)
+After `pip install -r requirements.txt` this is the only setup you need:
 
-Model weights are saved locally under `ai_core/LLMs/` and are excluded from Git commits via `.gitignore`.
+1. Export your quantized model from HuggingFace as a folder containing at least:
+   - `config.json` (model config)
+   - tokenizer files (`tokenizer.json` / `tokenizer.model` / `tokenizer_config.json`)
+   - a weights file (`model.safetensors`, `pytorch_model.bin` or `model.bin`)
+   The demo configuration uses Qwen-3B for both judge and mutator; a 4-bit/GPTQ export is ~6.5 GB.
+2. Place the folder contents into `ai_core/LLMs/Qwen-3B/`. Prefer a custom mount path?
+   Set `FINCAP_LLM_DIR` before starting the server, e.g.
+   `FINCAP_LLM_DIR=C:\models\Qwen-3B uvicorn app.main:app --host 127.0.0.1 --port 8000 --app-dir ..`
+3. Verify the upload:
+   `python scripts\check_weights.py`   # prints [OK] on every category, exit status 0
+4. Start the server (see §1). The backend re-checks the weight folder on every request,
+   so `GET /api/health` flips to `llm_weights_available: true` and the dashboard switches
+   from the rule-based judge to the local LLM judge automatically — no restart, no config
+   edits, no manual steps.
 
-### 3. Running the Pipeline
+Notes:
+- The demo configuration runs the same uploaded Qwen-3B weights for both the Stage-1
+  economic judge and the Stage-2 closed-vocabulary mutator (single-model mode).
+- Weights are gitignored: only `config.json` + tokenizer + weights need to sit in the
+  folder. A partial upload is reported per-category by the check script, so you always
+  know exactly what to copy.
+- If the folder is absent when a pipeline starts, that run uses the rule-based judge; a
+  re-run after upload activates the LLM judge automatically.
 
-To run the full factor discovery pipeline with the Two-Stage LLM Semantic Refinement loop:
+### 4. Run modes (backend)
+| Endpoint | Behaviour |
+|---|---|
+| `POST /api/run/quick` | Demo-grade (~2 min): pop 80 · 10 generations · 1 seed · default judge rules |
+| `POST /api/run/standard` | Full (~10 min): pop 200 · 30 generations · 2 seeds · all rules + clamps |
 
-```bash
-cd "ai_core/Previous models/Hybrid-FinGpAlpha/gp"
-python final_experiments.py
-```
+### 5. Dashboard
+```powershell
+# Server: serves API + production frontend build at GET /
+uvicorn app.main:app --host 127.0.0.1 --port 8000 --app-dir ..
 
-To run baseline models without LLM refinement:
-
-```bash
-python baselines.py
+# Dev: Vite proxies /api → backend
+cd frontend && npm install && npm run dev
 ```
 
 ---
 
-## Project Team
+## Notes on honesty & sign-off
 
-- **Raghav Anand:** AI & Quantitative Research Lead (GP Engine, Two-Stage LLM Refiner, IEEE Access manuscript)
-- **Member 1:** Frontend Development Lead (Web dashboard, interactive portfolio visualization)
-- **Member 2:** Backend Architecture Lead (API routing, real-time pipeline integration)
-- **Member 3:** Financial Data & Research Lead (Data ingestion, preprocessing, market data validation)
-
----
-
-## Research Manuscript
-
-The research paper detailing the methodology, mathematical formulation, closed grammar specifications, and ablation analysis is available in the repository:
-- Source: `documentation/ACCESS_latex_template_20240429/access.tex`
-- PDF: `documentation/ACCESS_latex_template_20240429/access.pdf`
+* Synthetic signal is calibrated to a credible fold (mean rank IC ≈ 0.115, ~80% positive) — never
+  exaggerated Sharpe claims.
+* Every screen carries a `DEMO DATA` / `LIVE RUN` badge so demo and live numbers are never mixed.
+* The two-stage refinement path (`_stage2_mutate` → parse → `_val_ics`) was verified standalone:
+  identity wrappers stripped, repairs parsed, and the IC gate passes.

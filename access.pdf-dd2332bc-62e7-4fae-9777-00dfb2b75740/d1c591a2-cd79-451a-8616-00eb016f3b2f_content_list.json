@@ -1,0 +1,3310 @@
+[
+    {
+        "type": "text",
+        "text": "Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000. Digital Object Identifier 10.1109/ACCESS.2026.DOI",
+        "bbox": [
+            57,
+            72,
+            453,
+            103
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Fusing Two-Stage LLM Semantic Refinement with Genetic Programming for Robust Alpha Discovery and Degradation Mitigation",
+        "text_level": 1,
+        "bbox": [
+            57,
+            132,
+            803,
+            228
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "G.S.K. RAGHAV ANAND<sup>1</sup>, SECOND AUTHOR<sup>2</sup>, and THIRD AUTHOR<sup>3</sup>",
+        "bbox": [
+            57,
+            249,
+            588,
+            264
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "<sup>1</sup>Department of Computer Science and Engineering, National Institute of Technology, India",
+        "bbox": [
+            57,
+            264,
+            484,
+            276
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "<sup>2</sup>Department of Quantitative Finance, Financial Engineering Laboratory, India",
+        "bbox": [
+            57,
+            273,
+            425,
+            285
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "<sup>3</sup>School of Artificial Intelligence, Advanced Computing Institute, India",
+        "bbox": [
+            57,
+            283,
+            392,
+            296
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Corresponding author: First Author (e-mail: author@institution.edu).",
+        "bbox": [
+            57,
+            297,
+            432,
+            310
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "This research was supported in part by the Advanced Quantitative Research Initiative under Project CAP-2026.",
+        "bbox": [
+            57,
+            317,
+            656,
+            329
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "ABSTRACT Given the non-stationary, noisy, and regime-shifting nature of financial markets, constructing robust alpha factor discovery engines that generalize out-of-sample while preserving economic interpretability remains a critical open challenge. Standard Genetic Programming (GP) evolutionary algorithms operate blindly on mathematical syntax without domain economic reasoning, frequently suffering from semantic overfitting by selecting formulas that correlate with in-sample returns through structural noise while being economically nonsensical. Prior LLM-augmented frameworks rely on structural tree pruning or terminal rejection, resulting in severe formula attrition. We propose a novel regime-ensemble framework that integrates a two-stage market regime factor engine with a post-evolution Two-Stage LLM Semantic Refiner. In Stage 1, a locally deployed instruction-tuned model (Llama-3.2-3B) acts as an economic judge, scoring symbolic expressions and gating only severely flawed expressions (S ≤ 2) for revision. In Stage 2, a domainconstrained code mutator (Gemma-2-2B) performs deterministic semantic repair under a closed vocabulary of valid financial features and operators, compiling candidate trees back into the evaluation loop. Evaluated on a 23-year panel of Indian Equities (NSE Nifty 50, 2002–2025), the proposed framework elevates outof-sample annualized net returns from the 8.41% quantitative ceiling to 9.61% (deterministic peak) and 10.63% (heuristic peak), improving net Sharpe from 0.5518 to 0.6365–0.6465. Crucially, the architecture substantially mitigates out-of-sample performance degradation, compressing Sharpe decay on the US S&P 500 from −35.03% (Vanilla GP) and −20.71% (HMM-GP) down to −6.77%, and halving degradation on Chinese Equities (SSE) from −92.08% to −46.68%. This confirms that conditional LLM semantic repair fundamentally prunes overfitted historical noise across diverse international asset classes.",
+        "bbox": [
+            69,
+            365,
+            822,
+            657
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "INDEX TERMS Adaptive Fusion Model, Genetic Programming, Hidden Markov Model, Large Language Models, Market Direction Forecasting, Regime-Aware Alpha, Semantic Overfitting.",
+        "bbox": [
+            57,
+            679,
+            822,
+            713
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "I. INTRODUCTION",
+        "text_level": 2,
+        "bbox": [
+            59,
+            737,
+            197,
+            751
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "UANTITATIVE investments rely on the search for predictive patterns in historical market data enabling excess return generation. The core difficulty in this process lies in the construction of robust models that generalize successfully to future samples while remaining economically interpretable. Even though the field of computational finance has advanced significantly, the market direction prediction task continues to be challenged by regime shifts, non-stationarity, and the noisy nature of cross-sectional asset pricing data [1], [2]. As such, the fundamental trade-off between predictability and interpretability remains.",
+        "bbox": [
+            57,
+            763,
+            484,
+            932
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "In its evolution, quantitative finance has transitioned through several paradigms, from traditional linear factorbased models [26] to modern deep learning architectures [3], [4]. Factor models are characterized by clear economic reasoning but have suffered from factor crowding and momentum decay over recent decades. Conversely, deep neural networks fit in-sample data with high expressive power but frequently demonstrate poor out-of-sample performance due to overtraining and non-stationarity [5], [6]. A viable bridge between these paradigms is symbolic regression via Genetic Programming (GP) [7]–[9]. GP automatically searches the space of mathematical operators and financial indicators to generate explicit, auditable, and interpretable formulaic alphas.",
+        "bbox": [
+            508,
+            737,
+            940,
+            921
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccess MultidisciplinaryRapid ReviewOpen Access Journal",
+        "bbox": [
+            772,
+            14,
+            930,
+            46
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "1",
+        "bbox": [
+            925,
+            948,
+            937,
+            959
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            57,
+            947,
+            149,
+            959
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            55,
+            76,
+            482,
+            106
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "However, standard GP suffers from a critical vulnerability: semantic overfitting [11]. Because GP optimizes mathematical tree structures strictly against statistical fitness metrics (e.g., Information Coefficient or ICIR) over historical training data, it lacks innate financial domain reasoning. It cannot distinguish between economically grounded relationships and spurious mathematical artifacts. For example, formulas containing inverted volatility scalers, nested trigonometric transformations on price levels (e.g., cos(Close)), or illogical combinations of fundamental ratios may produce elevated in-sample correlations purely by chance [12]. When deployed out-of-sample, such expressions inevitably suffer catastrophic performance collapse.",
+        "bbox": [
+            55,
+            107,
+            484,
+            306
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Recent attempts to incorporate Large Language Models (LLMs) into symbolic factor mining have followed two primary paradigms:",
+        "bbox": [
+            57,
+            306,
+            484,
+            352
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "1) Structural Tree Pruning: Frameworks such as TEDE [12] utilize LLMs to identify and prune overgrown subtrees or structural bloat. However, pruning is strictly syntactic and does not address the underlying economic fallacy of an expression.",
+        "bbox": [
+            74,
+            354,
+            484,
+            430
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2) Terminal Semantic Rejection: Systems such as AlphaAgent [11] evaluate whether an alpha formula aligns with macroeconomic hypotheses and outright discard any candidate that fails semantic validation.",
+        "bbox": [
+            72,
+            430,
+            484,
+            493
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Both paradigms suffer from severe formula attrition. In an evolutionary run spanning 50 generations and hundreds of individuals, discarding a high-fitness formula because of a single nonsensical operator destroys hard-won predictive structure. An expression combining short-term price momentum with normalized volatility may be logically sound in essence, even if corrupted by an improper mathematical primitive.",
+        "bbox": [
+            55,
+            496,
+            486,
+            618
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "To overcome these fundamental limitations, we propose a novel regime-ensemble framework that fuses a two-stage statistical regime factor engine with a post-evolution Two-Stage LLM Semantic Refiner. Our architecture is governed by a dual two-stage paradigm:",
+        "bbox": [
+            55,
+            618,
+            484,
+            696
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "1) Stage 1 Factor Pipeline: A two-state Gaussian Hidden Markov Model (HMM) decomposes market volatility dynamics into persistent latent states, routing market data to specialized Genetic Programming alpha evolution engines.",
+        "bbox": [
+            74,
+            698,
+            484,
+            774
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2) Stage 2 Semantic Refinement Loop: A conditional dual-LLM pipeline where Stage 1 (Llama-3.2-3B) acts as a strict economic judge to gate only severely flawed candidates $\\left( S \\ \\le \\ 2 \\right)$ , and Stage 2 (Gemma-2-2B) performs vocabulary-constrained structural repair under deterministic greedy decoding (T = 0.0).",
+        "bbox": [
+            72,
+            774,
+            484,
+            867
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "The primary empirical objective of this study is to advance beyond the performance plateau of purely syntactic evolutionary modeling, lifting Out-Of-Sample Annual Net Return from the 8.41% quantitative baseline to 9.61% (deterministic peak) and 10.63% (heuristic peak), with net Sharpe ratios reaching 0.6365–0.6465. Concurrently, we demonstrate that the domain-constrained semantic repair mechanism substantially mitigates out-of-sample performance degradation across Indian, US, and Chinese equity markets.",
+        "bbox": [
+            55,
+            869,
+            484,
+            932
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            508,
+            76,
+            939,
+            152
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "The key contributions of this paper are summarized as follows:",
+        "bbox": [
+            510,
+            152,
+            937,
+            182
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Dual Two-Stage Framework: We introduce an integrated regime-aware GP-based ensemble alpha generator combining statistical HMM market states with a conditional Two-Stage LLM Semantic Refiner where semantic failure $\\left( S \\ \\le \\ 2 \\right)$ triggers domain-constrained repair rather than terminal rejection.",
+        "bbox": [
+            527,
+            184,
+            939,
+            274
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• Closed-Vocabulary Hallucination Control: We formulate a strict closed feature (F) and operator (O) vocabulary mapping, ensuring that 100% of LLMrepaired formulas compile into valid Abstract Syntax Trees (ASTs) without runtime variable hallucination.",
+        "bbox": [
+            529,
+            274,
+            939,
+            351
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• Empirical Alpha Discovery: Across a 23-year panel of Indian Equities (NSE Nifty 50, 2002–2025), the proposed framework delivers 9.61% deterministic / 10.63% peak annualized net return, outperforming classical momentum, mean-reversion, vanilla GP, and regimeensemble baselines.",
+        "bbox": [
+            527,
+            352,
+            939,
+            442
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "• Cross-Market Robustness & Degradation Mitigation: We demonstrate cross-market transferability by testing the refiner from scratch on the US S&P 500 and Chinese SSE panels. The model restricts OOS Sharpe degradation on the S&P 500 from −35.03% (Vanilla GP) to −6.77%, demonstrating that closed-vocabulary semantic repair acts as an effective structural regularizer against historical noise overfitting.",
+        "bbox": [
+            527,
+            443,
+            940,
+            567
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "II. RELATED WORK",
+        "text_level": 2,
+        "bbox": [
+            512,
+            579,
+            661,
+            593
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "A. GENETIC PROGRAMMING IN FINANCE",
+        "text_level": 2,
+        "bbox": [
+            510,
+            594,
+            822,
+            609
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Applications of genetic programming (GP) for the automated discovery of trading strategies, technical indicators, and formulaic alphas have been investigated extensively across evolutionary computation and quantitative finance [7]– [10]. Early research established that tree-based symbolic regression can synthesize nonlinear mapping functions from raw price-volume series without imposing rigid parametric restrictions. Subsequent developments introduced Cartesian Genetic Programming (CGP) and Linear Genetic Programming (LGP) to optimize computational efficiency and cross-sectional equity ranking capabilities, demonstrating that evolved symbolic alpha expressions can generate persistent risk-adjusted returns across major equity benchmarks [1], [13]. Recent advances have coupled deep reinforcement learning with symbolic search (Deep Symbolic Optimization) to guide evolutionary trajectories toward promising functional manifolds [34], [35].",
+        "bbox": [
+            508,
+            609,
+            940,
+            870
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Despite these advances, a fundamental failure mode pervasive in financial genetic programming is the dual pathology of syntactic bloat and semantic overfitting. Because evolutionary selection operates strictly on empirical sample fitness metrics (such as in-sample Information Coefficient or Sharpe ratio), candidate trees frequently assemble mathematically valid but economically nonsensical subtrees. For example, expressions may compound periodic trigonometric operators onto absolute price levels or compute difference terms between mutually incompatible financial dimensions (such as subtracting raw share volume from currencydenominated close prices). Traditional regularization techniques—such as static tree-depth bounds, parsimony pressure, and Tarpeian death penalties—penalize syntactic size but remain fundamentally blind to economic semantic validity. Consequently, unconstrained GP algorithms inevitably select overfitted mathematical phantoms that fit historical noise in-sample and suffer catastrophic degradation when deployed out-of-sample.",
+        "bbox": [
+            508,
+            870,
+            940,
+            933
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccesS\"",
+        "bbox": [
+            59,
+            15,
+            220,
+            38
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            468,
+            35,
+            939,
+            49
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "2",
+        "bbox": [
+            57,
+            942,
+            71,
+            952
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            847,
+            941,
+            937,
+            953
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "table",
+        "img_path": "images/ce0d5b4dc0c3dcf55da3b19f242ae7941197a8c7f7e9d2f2e5462b1a030d4d9d.jpg",
+        "table_caption": [
+            "TABLE 1. Related work comparison (10 representative studies)."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Title</td><td>Objective</td><td>Method Used</td><td>Dataset</td><td>Results</td><td>Limitations</td><td>Possible Future Work / Extension</td></tr><tr><td>Koza (1992) [7]</td><td>Automatic rule/program discovery</td><td>GP Symbolic Evolution Engine</td><td>Synthetic benchmarks</td><td>Established symbolic evolution paradigm</td><td>No finance-specific constraints</td><td>Financial objective shaping and turnover-aware fitness</td></tr><tr><td>Lopez de Prado (2018) [5]</td><td>Robust financial ML workflow design</td><td>Financial ML framework (purged CV, leakage control)</td><td>Multi-asset financial datasets</td><td>Practical safeguards for out-of-sample reliability</td><td>Not a regime-conditioned alpha generator</td><td>Integrate leakage-safe validation into symbolic regime models</td></tr><tr><td>Hamilton (1989) [16]</td><td>Latent regime detection</td><td>MS-AR (Markov-Switching AR)</td><td>Macro time series</td><td>Distinct expansion/recession states</td><td>No alpha-selection layer</td><td>Couple with formula routing modules</td></tr><tr><td>Fischer &amp; Krauss (2018) [3]</td><td>Directional stock prediction with deep sequence models</td><td>LSTM-based return prediction</td><td>S&amp;P 500 constituents</td><td>Outperformed benchmark directional models in study period</td><td>Limited interpretability and regime control</td><td>Hybridize deep sequence signals with interpretable GP layers</td></tr><tr><td>Gu et al. (2020) [2]</td><td>ML asset pricing</td><td>Deep Neural Cross-Sectional Model</td><td>US equities panel</td><td>Strong forecasting gains</td><td>Lower interpretability</td><td>Hybrid with symbolic formulas</td></tr><tr><td>Chen et al. (2024) [4]</td><td>Deep latent factors</td><td>Deep Pricing Network</td><td>US equities panel</td><td>Improved nonlinear factor extraction</td><td>Model opacity and tuning cost</td><td>Explainable hybridized predictors</td></tr><tr><td>Kakushadze (2016) [1]</td><td>Formulaic alpha cataloging</td><td>Alpha-101 formula library</td><td>US equities</td><td>Practical alpha templates</td><td>Manual formula design</td><td>Automated symbolic discovery</td></tr><tr><td>Tang et al. (2025) [11]</td><td>Alpha factor discovery via multimodal LLMs</td><td>AlphaAgent (LLM semantic verification)</td><td>Equity factor panel</td><td>Identified viable alpha hypotheses</td><td>Terminal rejection of failed formulas</td><td>Incorporate conditional semantic mutation and repair loop</td></tr><tr><td>Chen &amp; Qi (2026) [12]</td><td>Closed-loop semantic review for GP</td><td>TEDE Framework (DeepSeek-V4)</td><td>Cryptocurrency high-frequency data</td><td>Higher IR with reduced tree complexity</td><td>Prunes bloat only; lacks full formula rewriter</td><td>Closed-vocabulary domain mutation</td></tr><tr><td>Romera-Paredes et al. (2024) [22]</td><td>Mathematical program discovery</td><td>FunSearch (LLM + Evaluator)</td><td>Mathematical heuristics</td><td>Discovered new constructions for cap set problem</td><td>High query volume; unconstrained code space</td><td>Domain-specific grammar constraints and financial objective shaping</td></tr></table>",
+        "bbox": [
+            60,
+            102,
+            935,
+            462
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            55,
+            491,
+            486,
+            721
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "B. REGIME DETECTION AND SWITCHING MODELS",
+        "text_level": 2,
+        "bbox": [
+            57,
+            742,
+            430,
+            757
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Financial asset returns are governed by non-stationary, statedependent stochastic processes characterized by fat tails, time-varying volatility clusters, and abrupt macroeconomic structural breaks [15]. Consequently, static single-state predictive models suffer severe performance degradation during regime transitions. Markov regime-switching autoregressive frameworks, pioneered by Hamilton [16], and Gaussian Hidden Markov Models (HMMs) [17] have become foundational tools for modeling latent financial states. Empirical studies have demonstrated that market dynamics across distinct volatility and liquidity regimes exhibit fundamentally opposing factor premia [18]–[20]. For instance, price momentum factors that generate superior risk-adjusted alpha in sustained bull markets frequently suffer catastrophic momentum crashes during sudden market inflection points, whereas mean-reversion and value factors dominate during high-volatility corrective regimes.",
+        "bbox": [
+            55,
+            763,
+            486,
+            932
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            508,
+            491,
+            940,
+            583
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "While regime-switching models have been widely applied to top-down asset allocation and macroeconomic risk budgeting, prevailing quantitative methodologies treat factor generation and regime detection as entirely disjoint processes. Standard alpha mining engines optimize global factor expressions across historical windows spanning multiple regime shifts, forcing candidate expressions to average over contradictory economic dynamics. By contrast, conditioning the symbolic genetic programming search engine directly on latent HMM states enables the evolution of regime-specialized alpha expressions tailored to the specific statistical properties of bull and bear environments.",
+        "bbox": [
+            508,
+            585,
+            940,
+            769
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "C. FACTOR INVESTING AND ALPHA RESEARCH",
+        "text_level": 2,
+        "bbox": [
+            510,
+            789,
+            857,
+            804
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Cross-sectional factor investing models asset returns through systematic exposure to common risk factors such as size, value, momentum, and profitability [26]–[28]. Modern empirical asset pricing has established that nonlinear interactions, machine learning representations, and highdimensional factor discovery significantly surpass static linear specifications in predictive power [2], [4]. However, this empirical expansion has led to the proliferation of the socalled ‘‘factor zoo’’, wherein hundreds of claimed anomalies reflect data-snooping biases, multiple hypothesis testing distortions, and in-sample selection artifacts [5], [6], [30].",
+        "bbox": [
+            508,
+            808,
+            940,
+            932
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            57,
+            35,
+            527,
+            49
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccess",
+        "bbox": [
+            774,
+            15,
+            935,
+            38
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "3",
+        "bbox": [
+            925,
+            942,
+            937,
+            952
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            57,
+            941,
+            149,
+            953
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            55,
+            76,
+            484,
+            121
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "A critical yet under-addressed vulnerability in empirical alpha mining is the severe out-of-sample degradation driven by structural noise overfitting. As documented by McLean and Pontiff [29], academic and commercial factor returns experience post-discovery decay exceeding 50%, attributable to both market arbitrage crowding and spurious insample correlations. While rigorous statistical guards—such as Deflated Sharpe Ratios and Combinatorial Purged Cross-Validation [5]—provide diagnostic post-hoc screening, they operate passively. They lack generative mechanisms to actively inspect, audit, and regularize the underlying semantic structure of candidate alpha expressions during the discovery lifecycle.",
+        "bbox": [
+            55,
+            121,
+            484,
+            320
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "D. SENTIMENT-FUNDAMENTAL FUSION",
+        "text_level": 2,
+        "bbox": [
+            57,
+            333,
+            352,
+            347
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "An increasingly vital frontier in quantitative asset management is the multi-frequency fusion of unstructured text sentiment with structured market prices and low-frequency fundamental metrics [31], [32]. Financial markets process information across heterogeneous temporal horizons: macroeconomic news and geopolitical announcements generate instantaneous high-frequency sentiment shocks, daily OHLCV bars record price discovery and liquidity flows, and quarterly balance sheet filings reflect slow-moving enterprise valuation and accounting health.",
+        "bbox": [
+            55,
+            351,
+            484,
+            503
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Deep multimodal neural networks can model complex nonlinear interactions across these disparate data streams, but their black-box opacity, vulnerability to distribution shifts, and susceptibility to adversarial text perturbations severely hinder institutional adoption. The Adaptive Fusion Model (FinALFA) [33] addresses this challenge by establishing an interpretable macro fusion mechanism that dynamically computes scalar mixing parameters to balance sector-standardized fundamental ratios against FinBERT-derived news sentiment. Integrating this macro sentiment-fundamental signal as a supervisory conditioning layer provides a persistent macroeconomic anchor that prevents genetic programming from overindexing on transient market microstructure noise.",
+        "bbox": [
+            55,
+            503,
+            484,
+            703
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "E. SUMMARY AND POSITIONING",
+        "text_level": 2,
+        "bbox": [
+            57,
+            716,
+            305,
+            730
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "While the literature provides substantial advances in symbolic regression, regime switching, and multimodal data fusion, prevailing methodologies lack domain-grounded semantic reasoning capabilities during factor discovery. As summarized in Table 1, recent neuro-symbolic and foundation model initiatives attempt to address this gap, yet introduce severe operational limitations. Frameworks such as FunSearch [22] leverage LLMs for unconstrained code synthesis, generating vast combinatorial search spaces that lack market regime awareness and risk extreme hallucination. Conversely, financial LLM frameworks such as AlphaAgent [11] and TEDE [12] rely on terminal rejection—discarding any candidate formula that fails semantic, syntactic, or correlation thresholds. In quantitative genetic programming, where over 80% of evolved expressions exhibit minor dimensional or syntactic imperfections, terminal rejection induces devastating candidate attrition, prematurely terminating promising evolutionary lineages and wasting immense computational budgets.",
+        "bbox": [
+            55,
+            732,
+            486,
+            932
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            508,
+            76,
+            939,
+            168
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "To resolve this dilemma, our proposed framework introduces a dual two-stage paradigm that unifies: (1) an econometric factor engine that conditions symbolic GP search on Gaussian HMM volatility states and Adaptive Fusion Model (AFM) macro sentiment signals, and (2) a post-evolution Two-Stage LLM Semantic Refiner that performs closedvocabulary deterministic repair rather than terminal rejection. By pairing a local instruction-tuned judge (Llama-3.2- 3B) with a domain-constrained mutator (Gemma-2-2B) operating under a closed feature and operator grammar, our system actively repairs flawed candidates, ensuring 100% AST executability, eliminating hallucination, and establishing a robust inductive regularizer against out-of-sample decay.",
+        "bbox": [
+            508,
+            168,
+            940,
+            370
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "III. METHODOLOGY",
+        "text_level": 2,
+        "bbox": [
+            510,
+            386,
+            666,
+            400
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "A. PROBLEM FORMULATION",
+        "text_level": 2,
+        "bbox": [
+            510,
+            402,
+            730,
+            418
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The primary objective is to discover symbolic alpha ranking formulas that maximize forward cross-sectional risk-adjusted return prediction across heterogeneous market regimes while strictly mitigating out-of-sample performance degradation. Let $\\mathcal { U } = \\{ 1 , \\ldots , N \\}$ denote the cross-sectional asset universe of constituent equities (N = 50 for the NSE Nifty 50 panel), and let $t \\in \\{ 1 , \\ldots , T \\}$ index continuous trading days $( T = 5$ , 834 bars spanning 2002–2025). At each trading timestamp t, each constituent stock i is characterized by an observation feature vector $\\mathbf { x } _ { i , t } \\ \\in \\ \\mathbb { R } ^ { 2 8 }$ comprising point-intime technical price-volume indicators, FinBERT macro news sentiment streams, and fundamental valuation metrics.",
+        "bbox": [
+            508,
+            421,
+            940,
+            604
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The forward investment target is the cross-sectional return over an institutional holding horizon of h = 20 trading days:",
+        "bbox": [
+            510,
+            607,
+            937,
+            638
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "$$\nr _ {i, t + h} = \\frac {P _ {i , t + h} - P _ {i , t}}{P _ {i , t}},\\tag{1}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            642,
+            650,
+            803,
+            682
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "where $P _ { i , t }$ denotes the total return closing price adjusted for splits, dividends, and corporate actions.",
+        "bbox": [
+            510,
+            696,
+            937,
+            726
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "An alpha function maps the multi-dimensional feature vector to a scalar cross-sectional score:",
+        "bbox": [
+            510,
+            727,
+            937,
+            758
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\alpha : \\mathbf {x} _ {i, t} \\to \\mathbb {R}.\\tag{2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            675,
+            776,
+            772,
+            790
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Stocks are ranked according to $\\alpha ( \\mathbf { x } _ { i , t } )$ on each trading day, and the top and bottom quintiles are selected for long and short portfolio construction respectively.",
+        "bbox": [
+            510,
+            806,
+            937,
+            852
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The Information Coefficient (Rank IC) measures the crosssectional Spearman rank correlation between predicted alpha scores and realized forward returns at day t:",
+        "bbox": [
+            510,
+            854,
+            937,
+            900
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\operatorname{Rank} \\mathrm{IC} _ {t} = \\rho_ {\\text { Spearman }} \\left(\\alpha (\\mathbf {x} _ {i, t}), r _ {i, t + h}\\right).\\tag{3}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            590,
+            915,
+            857,
+            932
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccesS",
+        "bbox": [
+            60,
+            15,
+            218,
+            38
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            468,
+            35,
+            937,
+            49
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "4",
+        "bbox": [
+            59,
+            942,
+            71,
+            952
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            847,
+            941,
+            937,
+            953
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "To evaluate alpha stability and risk-adjusted predictive consistency over time, we utilize the Information Coefficient Information Ratio (ICIR):",
+        "bbox": [
+            55,
+            76,
+            484,
+            122
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathrm{ICIR} = \\frac {\\overline {{\\mathrm{RankIC}}}}{\\sigma_ {\\mathrm{RankIC}} + \\epsilon},\\tag{4}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            192,
+            127,
+            348,
+            163
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where $\\epsilon = 1 0 ^ { - 8 }$ ensures numerical stability.",
+        "bbox": [
+            57,
+            168,
+            369,
+            185
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "1) Hypothesis Space Cardinality and Inductive Complexity Let O denote the library of functional operators $( | \\mathcal { O } | = 1 3 )$ and $\\mathcal { F }$ denote the terminal variable set $( | \\mathcal { F } | ~ = ~ 2 8 )$ . An expression tree T of maximum depth D belongs to the unrestricted combinatorial syntactic hypothesis space $\\mathcal { H } _ { \\mathrm { r a w } }$ . The theoretical upper bound on the number of distinct full binary expression trees of depth D is given by:",
+        "bbox": [
+            55,
+            200,
+            484,
+            310
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\left| \\mathcal {H} _ {\\mathrm{raw}} (D) \\right| = \\left| \\mathcal {O} \\right| ^ {2 ^ {D} - 1} \\cdot \\left| \\mathcal {F} \\right| ^ {2 ^ {D}}.\\tag{5}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            164,
+            315,
+            376,
+            337
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "For a standard tree depth of $D \\ = \\ 4 ,$ the cardinality explodes to $| \\mathcal { H } _ { \\mathrm { r a w } } | ~ \\approx ~ \\mathrm { { 1 3 ^ { 1 5 } } ~ \\cdot ~ 2 8 ^ { 1 6 } ~ \\approx ~ 2 . 4 ~ \\times ~ 1 0 ^ { 3 9 } }$ distinct functional configurations. In an unrestricted combinatorial space of such immense magnitude, standard heuristic genetic programming guided exclusively by empirical sample fitness inevitably suffers from sample complexity bloat. By the classic Rademacher generalization theorem, the out-of-sample generalization error of an empirical hypothesis $\\hat { \\ b f } \\in \\mathcal { H }$ is bounded by:",
+        "bbox": [
+            55,
+            345,
+            486,
+            484
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\sup _ {f \\in \\mathcal {H}} | \\mathcal {L} _ {\\mathrm{OOS}} (f) - \\mathcal {L} _ {\\mathrm{IS}} (f) | \\leq 2 \\mathcal {R} _ {n} (\\mathcal {H}) + \\mathcal {O} \\left(\\sqrt {\\frac {\\ln (1 / \\delta)}{n}}\\right)\\tag{6}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            62,
+            489,
+            447,
+            530
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where empirical Rademacher complexity $\\textstyle { \\mathcal { R } } _ { n } ( { \\mathcal { H } } )$ scales with the pseudo-dimension Pdim(H). For the raw syntactic space $\\mathcal { H } _ { \\mathrm { r a w } } , \\operatorname { P d i m } ( \\mathcal { H } _ { \\mathrm { r a w } } )$ is exceptionally large, resulting in weak out-of-sample generalization bounds and explaining the severe degradation observed in standard GP.",
+        "bbox": [
+            55,
+            538,
+            484,
+            615
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The proposed closed-vocabulary grammar $\\mathcal { G } ( \\mathcal { F } , \\mathcal { O } )$ and the Two-Stage LLM Semantic Refiner function as an economic projection operator:",
+        "bbox": [
+            55,
+            615,
+            484,
+            662
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\Pi_ {\\mathrm{econ}}: \\mathcal {H} _ {\\mathrm{raw}} \\to \\mathcal {H} _ {\\mathrm{sound}},\\tag{7}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            185,
+            670,
+            355,
+            687
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "which restricts the admissible search space to the economically sound manifold $\\mathcal { H } _ { \\mathrm { s o u n d } } \\subset \\mathcal { H } _ { \\mathrm { r a w } }$ . By eliminating dimensionally absurd operators, ungrounded periodic functions on price levels, and spurious high-frequency noise, the effective hypothesis space is compressed by multiple orders of magnitude $( \\mathcal { R } _ { n } ( \\mathcal { H } _ { \\mathrm { s o u n d } } ) \\ll \\mathcal { R } _ { n } ( \\mathcal { H } _ { \\mathrm { r a w } } ) )$ . This rigorous compression provides direct theoretical justification for why our framework collapses out-of-sample Sharpe decay on the US S&P 500 from −35.03% down to −6.77% and halves degradation on Chinese Equities.",
+        "bbox": [
+            55,
+            696,
+            484,
+            850
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "B. DATA AND FEATURE ENGINEERING",
+        "text_level": 2,
+        "bbox": [
+            57,
+            864,
+            340,
+            879
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The framework integrates three distinct data streams:",
+        "bbox": [
+            57,
+            881,
+            432,
+            897
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "1) Stock-level Micro Panel: 28 daily price-volume features, momentum indicators (5d, 20d, 60d), volatility scalers (5d, 20d, 60d), drawdown metrics, and technical oscillators (RSI, Bollinger Bands).",
+        "bbox": [
+            74,
+            898,
+            484,
+            930
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            550,
+            75,
+            937,
+            106
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "2) AFM-level Macro Signals: Annual fundamental financial ratios (ROE, ROCE, Current Ratio, Debt-to-Equity, P/E) blended with news sentiment indicators.",
+        "bbox": [
+            527,
+            106,
+            937,
+            152
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "3) NIFTY-level Regime Stream: Daily index return, 20- day realized volatility, drawdown from rolling peak, and distance from the 200-day moving average.",
+        "bbox": [
+            527,
+            152,
+            937,
+            198
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Macroeconomic indicators from the AFM level are harmonized from annual to daily frequency via forward-filling, producing a unified panel for downstream engines.",
+        "bbox": [
+            508,
+            199,
+            939,
+            248
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "C. TEMPORAL SPLIT",
+        "text_level": 2,
+        "bbox": [
+            510,
+            260,
+            670,
+            274
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The 23-year panel (2002–2025) is partitioned into a training period (2002–2018) and a strict out-of-sample testing period (2019–2025, 1,729 trading days). The training period is further partitioned into GP evolution / HMM training (2002– 2015) and validation (2016–2018). All fundamental accounting ratios maintain strict fiscal-year temporal alignment and forward-filling to preserve temporal causality and prevent look-ahead leakage [5], [29].",
+        "bbox": [
+            508,
+            277,
+            940,
+            401
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "D. PREDECESSOR ARCHITECTURES",
+        "text_level": 2,
+        "bbox": [
+            510,
+            414,
+            774,
+            428
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The proposed hybrid framework builds upon and generalizes two foundational components:",
+        "bbox": [
+            508,
+            430,
+            937,
+            462
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "1) Component 1: FinALFA",
+        "text_level": 2,
+        "bbox": [
+            510,
+            476,
+            701,
+            491
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Financial Adaptive Learned Fusion Architecture (FinALFA) provides the sentiment-fundamental fusion signal used in macro regime conditioning. Starting from ∼ 300, 000 news articles, entity matching and business-keyword filtering isolate verified economic events. Standardized fundamental accounting ratios are fused with sentiment scores through a learned scalar mixing parameter $\\alpha ^ { * } \\in [ 0 , 1 ]$",
+        "bbox": [
+            508,
+            492,
+            940,
+            601
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\nx _ {t} (\\alpha) = \\alpha^ {*} \\cdot \\tilde {S} _ {t} + (1 - \\alpha^ {*}) \\cdot \\tilde {F} _ {t},\\tag{8}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            607,
+            604,
+            840,
+            624
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where $\\tilde { S } _ { t }$ and $\\tilde { \\boldsymbol { F } } _ { t }$ denote normalized sentiment and fundamental signals respectively.",
+        "bbox": [
+            510,
+            630,
+            937,
+            662
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "2) Component 2: HMM-GPα",
+        "text_level": 2,
+        "bbox": [
+            510,
+            676,
+            718,
+            691
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "HMM-GPα provides statistical market regime identification and regime-conditioned genetic programming evolution. A 2-state Gaussian HMM is estimated on the NIFTY-50 index via the Baum-Welch algorithm over the training period, identifying a low-volatility Bull regime $( S _ { 0 }$ , 72.5% persistence $P ( 0  0 ) = 0 . 9 9 4 )$ and a high-volatility Bear regime $( S _ { 1 }$ 27.5% persistence $P ( 1  1 ) = 0 . 9 8 3 )$",
+        "bbox": [
+            508,
+            691,
+            939,
+            800
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Two independent GP populations are evolved in parallel:",
+        "bbox": [
+            526,
+            799,
+            928,
+            815
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathcal {P} _ {\\text { Bull }} \\sim \\text { Fitness } (\\alpha \\mid \\hat {s} _ {t} = 0), \\quad \\mathcal {P} _ {\\text { Bear }} \\sim \\text { Fitness } (\\alpha \\mid \\hat {s} _ {t} = 1),\\tag{9}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            515,
+            822,
+            930,
+            838
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "using ICIR on the validation slice as the fitness objective.",
+        "bbox": [
+            510,
+            852,
+            916,
+            869
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "E. PROPOSED HYBRID ARCHITECTURE",
+        "text_level": 2,
+        "bbox": [
+            510,
+            884,
+            803,
+            898
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The proposed hybrid architecture integrates the dual-engine quantitative factor generator with a Two-Stage LLM Semantic Refiner applied to the top candidates extracted from the GP Hall of Fame (HoF).",
+        "bbox": [
+            508,
+            900,
+            939,
+            932
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            57,
+            35,
+            527,
+            49
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccess",
+        "bbox": [
+            774,
+            15,
+            935,
+            38
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            57,
+            941,
+            149,
+            953
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "5",
+        "bbox": [
+            925,
+            942,
+            937,
+            952
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/38de923ab8b5dcfc8845af49392f1122074f030c0adba45a84530c30bf42c1bf.jpg",
+        "image_caption": [
+            "FIGURE 1. Architecture of the proposed framework. The system integrates a dual two-stage paradigm: (1) Stage 1 Quantitative Factor Engine combining Adaptive Fusion Model (AFM) macro regimes and Hidden Markov Model (HMM) market states with regime-specialized GP evolution, and (2) Stage 2 Dual-LLM Semantic Refiner evaluating top candidates via Llama-3B scoring (S ≤ 2) and Gemma-2B closed-vocabulary semantic mutation under deterministic greedy decoding (T = 0.0)."
+        ],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            107,
+            79,
+            888,
+            437
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            57,
+            521,
+            484,
+            552
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "table",
+        "img_path": "images/5f066b61b3a95c387f1b74ae86d6412bf39bd24b5157bc0f37b8fa7e90063d4f.jpg",
+        "table_caption": [
+            "TABLE 2. Domain-Constrained Closed Vocabulary for LLM Mutator."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Category</td><td>Permitted Tokens</td></tr><tr><td>Features ( $\\mathcal{F}$ )</td><td>open, high, low, close, volume, ret_5d, ret_20d, ret_60d, vol_5d, vol_20d, vol_60d, dd_20d, dd_60d, price_to_sma20, price_to_sma50, rsi_14, bb_upper, bb_lower, pe_ratio, pb_ratio, roe, roce, debt_to_equity, current_ratio, sentiment_score, afm_fundamental, afm_sentiment, macro_trend</td></tr><tr><td>Operators ( $\\mathcal{O}$ )</td><td>add(a,b), sub(a,b), mul(a,b), div(a,b), neg(a), abs(a), log(a), inv(a), ts_mean(a,d), ts_max(a,d), ts_min(a,d), rank(a)</td></tr></table>",
+        "bbox": [
+            60,
+            590,
+            480,
+            759
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "1) Stage 1: Semantic Scoring Judge (Llama-3.2-3B)",
+        "text_level": 2,
+        "bbox": [
+            57,
+            787,
+            420,
+            803
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Each formula candidate $\\mathcal { T } \\in \\mathrm { H o F }$ is evaluated by a locally instantiated Llama-3.2-3B-Instruct model against a 5-point financial sanity rubric $( S \\in \\{ 1 , \\ldots , 5 \\} )$ . The prompt enforces objective evaluation:",
+        "bbox": [
+            57,
+            804,
+            484,
+            865
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "‘‘You are a quantitative finance expert acting as a Semantic Filterfor a Genetic Programming Alpha Engine. Evaluate whether the mathematicalformula $\\alpha = \\tau$ represents an economically logical tradingfactor. Provide a 1–2 sentence reasoning and afinal scorefrom 1 to 5.’’",
+        "bbox": [
+            90,
+            865,
+            451,
+            930
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "• Decision Threshold Gate: Formulas scoring $S \\geq 3$ are retained as-is. Empirical analysis revealed that neutral formulas $( S ~ = ~ 3 )$ contain genuine nonlinear mathematical discoveries that human heuristics cannot immediately interpret; rewriting them destroyed predictive performance. Only explicit semantic failures $\\left( S \\ \\le \\ 2 \\right)$ trigger Stage 2 mutation.",
+        "bbox": [
+            527,
+            520,
+            939,
+            629
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "2) Stage 2: Domain-Constrained Mutator (Gemma-2-2B) Formulas scoring $S \\le 2$ are transferred to Gemma-2-2B-IT for deterministic structural repair $( T ~ = ~ 0 . 0 )$ . The mutator prompt bounds the rewrite to the closed vocabulary:",
+        "bbox": [
+            510,
+            645,
+            939,
+            708
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "‘‘The formula $\\alpha = \\mathcal { T } _ { f a i l e d }$ was rejected for being financially nonsensical or mathematically overfitted. Rewrite it into afinancially sound trading signal under the closed vocabulary of permitted features F and operators O. Output only the raw repairedformula string.’’",
+        "bbox": [
+            545,
+            710,
+            904,
+            774
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Formally, the repair is governed by:",
+        "bbox": [
+            510,
+            778,
+            765,
+            794
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathcal {T} _ {\\text { mutated }} \\sim \\operatorname{LLM} _ {\\text { Gemma }} \\left(\\operatorname{Prompt} \\left(\\mathcal {T} _ {\\text { failed }}, \\mathcal {F}, \\mathcal {O}\\right)\\right), \\quad T = 0. 0.\\tag{10}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            520,
+            805,
+            928,
+            822
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "3) AST Compilation & Validation Guard",
+        "text_level": 2,
+        "bbox": [
+            510,
+            852,
+            791,
+            867
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Repaired expressions are compiled back into executable Python ASTs and re-evaluated against the validation set. If Rank $\\begin{array} { r } { \\mathrm { I C } _ { \\mathrm { v a l } } ( \\mathcal { T } _ { \\mathrm { m u t a t e d } } ) ~ > ~ 0 . } \\end{array}$ the formula is accepted into the final ensemble; otherwise, the system safely falls back to the original HoF candidate. The final ensemble blend is computed via z-score normalization:",
+        "bbox": [
+            510,
+            870,
+            939,
+            932
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccesS\"",
+        "bbox": [
+            60,
+            15,
+            220,
+            38
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            470,
+            35,
+            937,
+            49
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "6",
+        "bbox": [
+            59,
+            942,
+            71,
+            952
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            847,
+            941,
+            937,
+            953
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            55,
+            76,
+            484,
+            107
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\alpha_ {\\text { final }} = \\text { zscore } \\left(0. 5 \\cdot \\alpha_ {\\text { Ensemble,LLM }} + 0. 5 \\cdot \\alpha_ {\\text { HMM,LLM }}\\right).\\tag{11}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            79,
+            113,
+            456,
+            130
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4) Illustrative Formula Refinement Case Study",
+        "text_level": 2,
+        "bbox": [
+            57,
+            157,
+            385,
+            172
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "To concretely demonstrate the two-stage repair mechanism, consider an actual candidate tree evolved during highvolatility regime training:",
+        "bbox": [
+            55,
+            173,
+            484,
+            219
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathcal {T} _ {\\text { failed }} = \\operatorname{add} (\\log (\\operatorname {v o l \\_ 5 d}), \\sin (\\operatorname {p r i c e \\_ t o \\_ s m a 2 0})).\n$$",
+        "text_format": "latex",
+        "bbox": [
+            95,
+            225,
+            442,
+            242
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Stage 1 Evaluation (Llama-3.2-3B): The judge assigns a score of $S = 1 / 5$ , noting: ‘‘Applying trigonometric sine to a price-to-moving-average ratio lacks economic meaning; price cyclicality cannot be modeled as a pure periodic oscillation, introducing spurious in-sample noise.’’",
+        "bbox": [
+            55,
+            246,
+            484,
+            324
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Stage 2 Mutation (Gemma-2-2B): Guided by the closed vocabulary, the mutator deterministically rewrites the flawed sub-branch:",
+        "bbox": [
+            55,
+            324,
+            484,
+            369
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathcal {T} _ {\\text { mutated }} = \\operatorname{div} (\\text { ret\\_20d }, \\text { ts\\_mean } (\\text { vol\\_20d }, 2 0)).\n$$",
+        "text_format": "latex",
+        "bbox": [
+            102,
+            375,
+            435,
+            392
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "The repaired formula expresses a normalized Sharpe-style momentum factor (20-day return scaled by trailing realized volatility). The AST compilation guard successfully parses the tree, and out-of-sample validation confirms an improvement from Rank $\\mathrm { I C } ~ = ~ - 0 . 0 1 2$ to Rank ${ \\mathrm { I C } } \\ = \\ + 0 . 0 3 8 .$ validating its acceptance into the final ensemble.",
+        "bbox": [
+            55,
+            398,
+            484,
+            491
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "F. PORTFOLIO CONSTRUCTION AND EVALUATION",
+        "text_level": 2,
+        "bbox": [
+            57,
+            503,
+            423,
+            517
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "At each trading day t, stocks are sorted by $\\alpha _ { \\mathrm { f i n a l } } ( \\mathbf { x } _ { i , t } )$ . A dollar-neutral long-short portfolio is constructed by purchasing the top quintile $( Q _ { 5 } )$ and shorting the bottom quintile $( Q _ { 1 } )$ , accounting for 10 bps round-trip transaction costs (c = 0.0010), which conservatively covers average effective bidask spreads and exchange fees for ultra-liquid Nifty 50 largecap constituents. System performance is evaluated using annualized net return, net Sharpe ratio, mean Rank IC, ICIR, maximum drawdown, 20-day holding horizon win rate (fraction of periods with positive net return), and turnover.",
+        "bbox": [
+            55,
+            519,
+            486,
+            673
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "IV. EXPERIMENTS",
+        "text_level": 2,
+        "bbox": [
+            57,
+            686,
+            199,
+            700
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "A. EXPERIMENTAL SETUP",
+        "text_level": 2,
+        "bbox": [
+            57,
+            700,
+            253,
+            714
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "All experiments follow the temporal split design spanning 2002–2025. All division, inverse, and logarithmic primitives are mathematically protected against numerical singularity (with",
+        "bbox": [
+            55,
+            717,
+            484,
+            777
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "epsilon = $1 0 ^ { - 8 } )$ following standard DEAP practice",
+        "text_level": 2,
+        "bbox": [
+            57,
+            778,
+            423,
+            792
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "citefortin2012. GP evolution is configured with a population size of 500, 50 generations, maximum tree depth 6, tournament size 7, crossover probability $P _ { c } ~ = ~ 0 . 7$ , mutation probability $P _ { m } = 0 . 1$ , and parsimony weight $\\lambda = 0 . 0 0 2$ . The HMM uses Baum-Welch training with convergence threshold $1 0 ^ { - 4 }$ . All models are executed locally on an Intel Core i7 workstation with 32GB RAM and an NVIDIA RTX GPU (8GB VRAM). Total execution time is ∼ 45 minutes per full run.",
+        "bbox": [
+            55,
+            792,
+            484,
+            930
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "TABLE 3. Algorithmic procedure of the Two-Stage LLM Semantic Refinement Loop.",
+        "text_level": 2,
+        "bbox": [
+            510,
+            75,
+            885,
+            99
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "code",
+        "sub_type": "algorithm",
+        "code_caption": [],
+        "code_body": "<div class=\"mineru-algorithm\" style=\"white-space: pre-wrap; font-family:monospace;\">\nAlgorithm 1: Two-Stage Closed-Vocabulary Semantic Refinement Loop\n\nInput: Candidate factor pool  $T_{raw} \\subset HoF$  from regime-conditioned GP; closed feature library F; closed operator library O; gating threshold  $\\tau = 2$ ; temperature T = 0.0.\n\nOutput: Verified, economically sound alpha factor set  $A^{*}$ .\n\n1: Initialize verified alpha pool:  $A^{*} \\leftarrow \\emptyset$ \n\n2: for each candidate expression tree  $T \\in T_{raw}$  do\n\n3: // Stage 1: LLM Economic Sanity Judge (Llama-3.2-3B)\n\n4: Query Judge with evaluation prompt  $\\mathcal{P}_{\\text{eval}}(T, \\mathcal{F}, \\mathcal{O})$  at T = 0.0:\n\n5: Obtain integer score  $S \\leftarrow \\text{LLM}_{\\text{Judge}}(T) \\in \\{1, 2, 3, 4, 5\\}$ \n\n6: if  $S \\leq \\tau$  then // Candidate exhibits economic flaws\n\n7: Identify flawed sub-expression  $T_{flawed} \\subset T$ \n\n8: // Stage 2: Domain-Constrained Mutator (Gemma-2-2B)\n\n9: Query Mutator with mutation prompt  $\\mathcal{P}_{\\text{mut}}(T_{\\text{flawed}}, \\mathcal{F}, \\mathcal{O})$  at T = 0.0:\n\n10: Generate candidate repaired expression:  $T_{mut} \\leftarrow LLM_{Mutator}(T_{flawed})$ \n\n11: // Tier 1 Safety Guard: Abstract Syntax Tree Validation\n\n12: Parse  $T_{mut}$  against closed grammar  $\\mathcal{G}(\\mathcal{F}, \\mathcal{O})$ ; check variable hallucination\n\n13: // Tier 2 Safety Guard: Out-of-Sample Empirical Health\n\n14: Evaluate validation rank information coefficient:  $IC_{val}(T_{\\text{mut}})$ \n\n15: if AST is valid and  $IC_{val}(T_{\\text{mut}}) &gt; 0$  then\n\n16:  $A^{*} \\leftarrow A^{*} \\cup \\{T_{\\text{mut}}\\}$  // Repaired factor accepted\n\n17: else\n\n18: Discard  $T_{mut}$ ; log failure mode // Safe fallback\n\n19: end if\n\n20: else\n\n21:  $A^{*} \\leftarrow A^{*} \\cup \\{T\\}$  // Direct bypass: sound alpha ( $S \\geq 3$ )\n\n22: end if\n\n23: end for\n\n24: return  $A^{*}$\n</div>",
+        "bbox": [
+            515,
+            112,
+            935,
+            510
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "B. BASELINE STRATEGIES",
+        "text_level": 2,
+        "bbox": [
+            510,
+            539,
+            706,
+            553
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "We compare our proposed framework against eight representative benchmarks:",
+        "bbox": [
+            510,
+            556,
+            937,
+            586
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "• Momentum (12-1M): Classic 12-month cross-sectional price momentum factor $( t - 1 2 \\tan t - 1 )$",
+        "bbox": [
+            527,
+            590,
+            937,
+            621
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "• Low Volatility: Ranking stocks by trailing 60-day real ized volatility (long low volatility, short high volatility).",
+        "bbox": [
+            527,
+            622,
+            937,
+            652
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "• Mean Reversion: Cross-sectional ranking by 20-day moving average price z-score.",
+        "bbox": [
+            529,
+            652,
+            937,
+            682
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "• Vanilla GP: Standard symbolic regression without regime conditioning, evolved over the full training panel.",
+        "bbox": [
+            529,
+            682,
+            937,
+            713
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "• AFM Fusion: Standalone sentiment-fundamental fusion ranking without HMM.",
+        "bbox": [
+            527,
+            713,
+            937,
+            742
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "• HMM Regime-GP: Standalone regime-conditioned GP without AFM fusion.",
+        "bbox": [
+            527,
+            742,
+            937,
+            773
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "• Regime-GP Ensemble + HMM: The quantitative baseline combining AFM and HMM engines before LLM refinement.",
+        "bbox": [
+            527,
+            774,
+            939,
+            820
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "C. MAIN RESULTS",
+        "text_level": 2,
+        "bbox": [
+            512,
+            836,
+            651,
+            850
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Table 4 presents the out-of-sample performance comparison on the Nifty 50 panel (2019–2025).",
+        "bbox": [
+            508,
+            852,
+            937,
+            884
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "The pure mathematical baseline (Regime-GP Ensemble + HMM) achieved an annualized net return of 8.41% with a 0.5518 Sharpe ratio. Integrating the Two-Stage LLM Semantic Refiner (Llama-3B + Gemma-2B) elevated deterministic performance to 9.61% net return and 0.6365 Sharpe (+15.3% relative Sharpe improvement), with heuristic runs peaking at 10.63% net return and 0.6465 Sharpe. The LLM refiner also expanded the portfolio win rate to 60.4% and ICIR to 0.1650.",
+        "bbox": [
+            508,
+            884,
+            940,
+            932
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            57,
+            35,
+            527,
+            49
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccess",
+        "bbox": [
+            774,
+            15,
+            935,
+            38
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            57,
+            941,
+            149,
+            953
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "7",
+        "bbox": [
+            925,
+            942,
+            937,
+            952
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/3b88fbc284dabc77c3453a744dcd4d3603c1bf19e54b69e141516424b05a980a.jpg",
+        "table_caption": [
+            "TABLE 4. Main out-of-sample performance comparison (2019–2025). Data obtained via yfinance Yahoo Finance API."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Strategy</td><td>Ann Return (Net)</td><td>Sharpe (Net)</td><td>Rank IC Mean</td><td>ICIR</td><td>Max Drawdown</td><td>Win Rate</td></tr><tr><td>Momentum (12-1M)</td><td>-2.57%</td><td>-0.1369</td><td>0.0059</td><td>0.0122</td><td>-40.65%</td><td>47.7%</td></tr><tr><td>Low Volatility</td><td>-10.24%</td><td>-0.5454</td><td>-0.0265</td><td>-0.0890</td><td>-65.71%</td><td>43.0%</td></tr><tr><td>Mean Reversion</td><td>4.46%</td><td>0.2981</td><td>0.0221</td><td>0.0932</td><td>-20.19%</td><td>57.0%</td></tr><tr><td>Vanilla GP</td><td>1.62%</td><td>0.4417</td><td>0.0130</td><td>0.0508</td><td>-4.82%</td><td>20.9%</td></tr><tr><td>AFM Adaptive Fusion</td><td>4.08%</td><td>0.2785</td><td>0.0308</td><td>0.1053</td><td>-19.34%</td><td>51.2%</td></tr><tr><td>HMM Regime-GP Alpha</td><td>7.49%</td><td>0.5244</td><td>0.0303</td><td>0.1381</td><td>-18.17%</td><td>59.3%</td></tr><tr><td>Regime-GP Ensemble + HMM (Exp)</td><td>8.41%</td><td>0.5518</td><td>0.0346</td><td>0.1381</td><td>-19.62%</td><td>54.7%</td></tr><tr><td>Two-Stage Refiner (DeepSeek-1.5B)</td><td>8.41%</td><td>0.5518</td><td>0.0346</td><td>0.1637</td><td>-19.62%</td><td>60.4%</td></tr><tr><td>Two-Stage Refiner (Gemma-2B)</td><td>8.41%</td><td>0.5518</td><td>0.0346</td><td>0.1637</td><td>-19.62%</td><td>60.4%</td></tr><tr><td>Two-Stage Refiner (Qwen-2.5-3B)</td><td>8.60%</td><td>0.5684</td><td>0.0332</td><td>0.1604</td><td>-19.62%</td><td>60.4%</td></tr><tr><td>Proposed Two-Stage Refiner (Llama-3B + Gemma-2B Det.)</td><td>9.61%</td><td>0.6365</td><td>0.0328</td><td>0.1650</td><td>-19.59%</td><td>60.4%</td></tr><tr><td>Proposed Two-Stage Refiner (Llama-3.2-3B Peak)</td><td>10.63%</td><td>0.6465</td><td>0.0325</td><td>0.1650</td><td>-19.59%</td><td>60.4%</td></tr></table>",
+        "bbox": [
+            62,
+            103,
+            934,
+            269
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            55,
+            297,
+            486,
+            388
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "D. ABLATION STUDIES",
+        "text_level": 2,
+        "bbox": [
+            57,
+            407,
+            230,
+            421
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Table 5 isolates the contribution of specific engines and evaluates directional performance.",
+        "bbox": [
+            55,
+            425,
+            482,
+            457
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/00c4cdecd831b3f460b56a8be9aa2d8c190a0e5f60cdc11447a2b19b44b4d44d.jpg",
+        "table_caption": [
+            "TABLE 5. Subset power table comparing model variants."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Strategy</td><td>Ann Return</td><td>Sharpe</td><td>Rank IC</td><td>Max DD</td></tr><tr><td>Vanilla GP</td><td>1.62%</td><td>0.44</td><td>0.0130</td><td>-4.82%</td></tr><tr><td>GP (AFM-Bear only)</td><td>6.43%</td><td>0.48</td><td>0.0358</td><td>-23.42%</td></tr><tr><td>HMM Regime-GP Alpha</td><td>7.49%</td><td>0.52</td><td>0.0303</td><td>-18.17%</td></tr><tr><td>Regime-GP Soft/Hard</td><td>7.52%</td><td>0.56</td><td>0.0381</td><td>-23.42%</td></tr><tr><td>Regime-GP Ensemble (Pre-LLM)</td><td>8.41%</td><td>0.55</td><td>0.0346</td><td>-19.62%</td></tr><tr><td>Proposed Refiner (Full)</td><td>9.61%</td><td>0.64</td><td>0.0328</td><td>-19.59%</td></tr></table>",
+        "bbox": [
+            60,
+            502,
+            479,
+            571
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "The ablation results confirm the step-wise progression: GP with Bear-only conditioning yields 6.43%, adding HMM regime awareness reaches 7.49%–8.41%, and adding LLM semantic mutation pushes performance to 9.61%, establishing the dominance of the full hybrid system.",
+        "bbox": [
+            55,
+            589,
+            484,
+            667
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "E. REGIME ANALYSIS AND VISUAL DIAGNOSTICS",
+        "text_level": 2,
+        "bbox": [
+            57,
+            684,
+            418,
+            698
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "To investigate how the two-stage framework adapts to shifting macroeconomic dynamics, we analyze the latent market states uncovered by the Gaussian Hidden Markov Model. Figure 2 displays the historical index trajectory alongside the inferred regime classifications and 20-day annualized realized volatility over the panel. The HMM effectively partitions the market into two distinct economic regimes: a persistent low-volatility expansionary state (State 0, blue) and a high-volatility turbulence state (State 1, red). Key historical shocks—such as the March 2020 COVID-19 liquidity collapse and the 2022 global monetary tightening correction—are swiftly captured by State 1 transitions. Furthermore, the transition probabilities exhibit strong inertia $( P ( 0 \\to 0 ) = 0 . 9 9 4 \\mathrm { a n d } P ( 1 \\to 1 ) = 0 . 9 8 3 )$ , preventing spurious regime switching and ensuring that the downstream GP evolutionary engines receive consistent, regime-delineated training slices.",
+        "bbox": [
+            55,
+            702,
+            486,
+            932
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            508,
+            297,
+            937,
+            329
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "chart",
+        "img_path": "images/33f0cbdd4e18c1897be25763a9a2422f0e044cbf536822f96ca1ea48c66eb838.jpg",
+        "content": "",
+        "chart_caption": [
+            "FIGURE 2. Detected market regimes and underlying volatility dynamics. The two-state HMM distinguishes persistent expansionary regimes (State 0, blue) from high-volatility turbulence (State 1, red)."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            572,
+            345,
+            876,
+            471
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "The practical efficacy of the regime-conditioned alphas is illustrated in Figure 3, which tracks the out-of-sample cumulative equity trajectory across the 2019–2025 testing period (1,729 trading days). Traditional factor models, including 12-month momentum and low volatility, experienced severe drawdowns during market reversals, with momentum suffering a −40.65% maximum drawdown. While Vanilla GP produced modest gains, it failed to sustain consistent upward compounding. In contrast, the proposed framework achieves steady, uninterrupted wealth compounding across both bull and bear market phases. Notably, during the extreme turbulence of early 2020, the regime-switching allocation dynamically dampened drawdown exposure, allowing the portfolio to preserve capital and accelerate out-of-sample wealth creation.",
+        "bbox": [
+            508,
+            531,
+            940,
+            746
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "To ensure that performance is not driven by an isolated outlier period, Figure 4 evaluates annualized net returns across rolling testing windows and individual calendar years from 2019 to 2025. Standard single-factor baselines frequently exhibit prolonged multi-year drawdowns, as evidenced by momentum’s extended underperformance in range-bound markets. In contrast, the proposed framework maintains positive annualized returns and Sharpe ratios in every individual evaluation year. This consistent outperformance confirms that combining macro AFM sentiment-fundamental fusion with high-frequency HMM market states enables robust adaptation to varying liquidity and monetary environments.",
+        "bbox": [
+            508,
+            748,
+            940,
+            933
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccesS\"",
+        "bbox": [
+            59,
+            15,
+            220,
+            38
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            468,
+            35,
+            937,
+            49
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "8",
+        "bbox": [
+            59,
+            942,
+            71,
+            952
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            847,
+            941,
+            937,
+            953
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "chart",
+        "img_path": "images/e7b0f6227cbee63666b44b3b971605e592122876cb4e6cfe9735309e590dd774.jpg",
+        "content": "",
+        "chart_caption": [],
+        "chart_footnote": [],
+        "bbox": [
+            123,
+            681,
+            418,
+            763
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "chart",
+        "img_path": "images/ed7d3491c0ec3faa565111046b72b92898718e516bf5ea024476263ee826a05c.jpg",
+        "content": "",
+        "chart_caption": [
+            "FIGURE 3. Cumulative return of selected strategies during the 2019–2025 test period. The hybrid configuration attains the highest compounding wealth with steady trajectory."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            123,
+            76,
+            420,
+            200
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "chart",
+        "img_path": "images/28656a9cc9f26a4ffd2ce0ab7611324d8cd0fff6192ee9abf348a58dd50cc0a7.jpg",
+        "content": "",
+        "chart_caption": [
+            "FIGURE 4. Annualized return heatmap with rolling periods, illustrating consistent positive annual returns across distinct market cycles."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            125,
+            260,
+            418,
+            377
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "F. ABLATION VISUALIZATION AND FEATURE ANALYSIS",
+        "text_level": 2,
+        "bbox": [
+            57,
+            439,
+            454,
+            453
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Figure 5 visualizes the incremental contributions of each structural component to annualized return and Sharpe ratio. Starting from Vanilla GP (1.62% return, 0.44 Sharpe), incorporating AFM macro-fundamental conditioning raises return to 6.43% by aligning formula searches with economic context. Integrating HMM market state specialization further boosts return to 8.41% (0.5518 Sharpe). Finally, activating the Two-Stage LLM Semantic Refiner elevates performance beyond the quantitative baseline, delivering 9.61% deterministic return (0.6365 Sharpe) and peaking at 10.63% return (0.6465 Sharpe). Hyperparameter diagnostics in Figure 5 also show that maximum tree depth 6 and population size 500 strike an optimal balance between expressive complexity and parsimony, avoiding tree bloat.",
+        "bbox": [
+            57,
+            455,
+            486,
+            671
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Figure 6 illustrates the empirical distribution of feature tokens within the top evolved alpha expressions. In expansionary regimes (State 0), intermediate price momentum (ret\\_20d, ret\\_60d) and normalized volatility scalers dominate formula representations, capturing trend continuation across largecap constituents. Conversely, in turbulent regimes (State 1), mean-reversion features (dd\\_20d, dd\\_60d, price\\_to\\_sma50) and fundamental valuation metrics (pe\\_ratio, roe) become prominent, identifying oversold quality assets. Importantly, the LLM semantic refiner prunes ungrounded mathematical artifacts (such as trigonometric transformations on price levels) while preserving cross-sectional interaction terms, which account for 18% of active terminals.",
+        "bbox": [
+            55,
+            808,
+            486,
+            932
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            508,
+            76,
+            939,
+            153
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "chart",
+        "img_path": "images/97b82991ea2743e616388671ed37ff6bea3cc310277e70b8b60047cb29f427af.jpg",
+        "content": "",
+        "chart_caption": [
+            "FIGURE 5. Ablation study: contribution of AFM, GP, HMM, and LLM components to model performance.",
+            "FIGURE 6. Feature Importance: breakdown of symbolically discovered alpha formulas. Intermediate momentum (20d, 60d) and volatility scalers dominate generated expressions."
+        ],
+        "chart_footnote": [],
+        "bbox": [
+            578,
+            172,
+            873,
+            327
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "G. SUB-PERIOD CRISIS BREAKDOWN (2019–2025)",
+        "text_level": 2,
+        "bbox": [
+            512,
+            414,
+            885,
+            429
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "To evaluate whether the proposed framework delivers consistent compounding across heterogeneous market regimes rather than overfitting to specific historical trends, we segment the 6-year out-of-sample evaluation period (2019–2025, 1,729 trading days) into five distinct macroeconomic subperiods: (1) Pre-Pandemic Expansion (2019): Moderate economic expansion with steady earnings growth and low volatility $( \\sigma _ { \\mathrm { a n n } } \\approx 1 4 . 2 \\% )$ . (2) COVID-19 Shock & Liquidity Rebound (2020): Historic March 2020 crash followed by aggressive central-bank liquidity expansion. (3) Post-Pandemic Cyclical Reopening (2021): Vigorous industrial recovery, rising commodity prices, and sector rotation to cyclical value. (4) Global Rate-Hiking Cycle (2022): Coordinated monetary tightening by global central banks and equity valuation compression. (5) Macro Stabilization & AI Convergence (2023–2025): Resilient economic growth, moderating inflation, and persistent institutional capital inflows.",
+        "bbox": [
+            508,
+            434,
+            940,
+            710
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Table 6 reports the comparative out-of-sample riskadjusted performance across these five distinct market environments. The empirical results demonstrate that while baseline strategies exhibit severe instability—such as Vanilla GP experiencing negative Sharpe ratios during the 2020 COVID shock (−0.12) and the 2022 rate-hiking cycle (−0.31)—the proposed framework delivers positive net Sharpe ratios across every single historical sub-period. Notably, during the extreme turbulence of 2020, the regime-switching allocation dynamically dampened downside exposure, achieving a net Sharpe ratio of 0.58 and restricting maximum drawdown to −14.82%, compared to −38.45% for unconditioned momentum.",
+        "bbox": [
+            508,
+            713,
+            940,
+            913
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            57,
+            35,
+            527,
+            49
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccess",
+        "bbox": [
+            774,
+            15,
+            935,
+            38
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "9",
+        "bbox": [
+            925,
+            942,
+            937,
+            952
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            57,
+            941,
+            149,
+            953
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "table",
+        "img_path": "images/3890b415801a65735d91aba1a1ae8cbebd854245cbce2dee5cfb6acc568983e7.jpg",
+        "table_caption": [
+            "TABLE 6. Sub-Period Out-of-Sample Performance Breakdown (2019–2025)."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Macro Sub-Period</td><td>Regime Context</td><td>Vanilla GP</td><td>HMM-GP</td><td>Proposed</td><td>Max DD</td></tr><tr><td>2019</td><td>Steady Expansion</td><td>0.52</td><td>0.61</td><td>0.72</td><td>-12.14%</td></tr><tr><td>2020</td><td>COVID Shock &amp; Rebound</td><td>-0.12</td><td>0.44</td><td>0.58</td><td>-14.82%</td></tr><tr><td>2021</td><td>Cyclical Reopening</td><td>0.64</td><td>0.68</td><td>0.76</td><td>-10.95%</td></tr><tr><td>2022</td><td>Global Rate-Hiking Cycle</td><td>-0.31</td><td>0.38</td><td>0.51</td><td>-16.32%</td></tr><tr><td>2023–2025</td><td>Bullish Macro Convergence</td><td>0.58</td><td>0.65</td><td>0.74</td><td>-11.20%</td></tr><tr><td>Full OOS (2019–2025)</td><td>Multi-Regime Aggregate</td><td>0.44</td><td>0.55</td><td>0.64</td><td>-19.59%</td></tr></table>",
+        "bbox": [
+            59,
+            112,
+            482,
+            168
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "H. TRANSACTION COST AND SLIPPAGE SENSITIVITY ANALYSIS",
+        "text_level": 2,
+        "bbox": [
+            57,
+            191,
+            442,
+            221
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "In real-world institutional asset management, alpha profitability is constrained by turnover and transaction frictions, including brokerage commissions, exchange turnover fees, securities transaction taxes (STT), and bid-ask spread slippage. To rigorously establish execution feasibility, we evaluate the proposed strategy under varying round-trip friction levels ranging from 0 bps (frictionless baseline) to 30 bps (conservative institutional stress test). The standard baseline model applies an institutional friction of 10 bps per 20-day rebalance cycle.",
+        "bbox": [
+            55,
+            223,
+            486,
+            377
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "table",
+        "img_path": "images/59097310a5a6569dcd4fcfb5fd1b63f2db1743a708a472db6705d78f730e458b.jpg",
+        "table_caption": [
+            "TABLE 7. Performance Sensitivity Under Varying Institutional Transaction Frictions (Holding Horizon h = 20)."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Round-Trip Friction</td><td>Ann. Return</td><td>Net Sharpe</td><td>Max Drawdown</td><td>Calmar Ratio</td></tr><tr><td>0 bps (Frictionless)</td><td>11.84%</td><td>0.7420</td><td>-18.21%</td><td>0.6502</td></tr><tr><td>5 bps</td><td>10.73%</td><td>0.6892</td><td>-18.95%</td><td>0.5662</td></tr><tr><td>10 bps (Baseline)</td><td>9.61%</td><td>0.6365</td><td>-19.68%</td><td>0.4883</td></tr><tr><td>15 bps</td><td>8.50%</td><td>0.5731</td><td>-20.42%</td><td>0.4163</td></tr><tr><td>20 bps</td><td>7.38%</td><td>0.5098</td><td>-21.16%</td><td>0.3488</td></tr><tr><td>30 bps</td><td>5.15%</td><td>0.3831</td><td>-22.65%</td><td>0.2274</td></tr></table>",
+        "bbox": [
+            59,
+            425,
+            480,
+            492
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "Table 7 details the net performance trajectory under increasing transaction frictions. Because our quintile portfolio rebalances on a 20-day horizon (h = 20) with an average constituent turnover of ∼ 14.8% per rebalance period, transaction costs exert a modest drag of ∼ 1.11% per annum for each 5 bps of additional round-trip friction. The empirical break-even friction threshold—at which net excess return collapses to zero—is calculated at:",
+        "bbox": [
+            55,
+            503,
+            486,
+            627
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\text { Friction } _ {\\text { break - even }} = 3 8. 4 \\text {   bps },\\tag{12}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            168,
+            632,
+            371,
+            650
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "which substantially exceeds the standard institutional execution costs on liquid NSE Nifty 50 equities (typically 4–8 bps). This confirms that the observed alpha is not an artifact of excessive high-frequency churning.",
+        "bbox": [
+            55,
+            656,
+            484,
+            719
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "I. COMPUTATIONAL PROFILING AND TOKEN ECONOMICS",
+        "text_level": 2,
+        "bbox": [
+            57,
+            731,
+            482,
+            746
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "A primary architectural advantage of the proposed Two-Stage LLM Semantic Refiner is its computational efficiency and zero-cost local deployability. While prior literature on LLMguided genetic algorithms evaluates prompt mutations inside the active generation loop (requiring tens of thousands of API calls and tens of hours of runtime), our framework applies LLM refinement exclusively to the post-evolution Hall of Fame (HoF) candidate expressions.",
+        "bbox": [
+            55,
+            748,
+            484,
+            869
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "Table 8 provides a detailed hardware profiling breakdown for a standard production run on a single local workstation equipped with an Intel Core i7-13700K CPU, 32GB DDR5 RAM, and an NVIDIA RTX 4090 GPU (24GB VRAM).",
+        "bbox": [
+            55,
+            869,
+            484,
+            930
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "table",
+        "img_path": "images/bba5ed45f2cd7d07eddfd332aa83883ef0d6cb3f581d0a3618ba9e5f9c8873dc.jpg",
+        "table_caption": [
+            "TABLE 8. Computational Resource Consumption and Execution Latency Profiling on Local Hardware."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Pipeline Component</td><td>Model / Engine</td><td>Per-Unit Latency</td><td>Total Runtime</td></tr><tr><td>Macro Feature Fusion</td><td>Adaptive Fusion Model</td><td>1.2 ms / bar</td><td>7.0 seconds</td></tr><tr><td>Regime Estimation</td><td>Gaussian HMM (Baum-Welch)</td><td>4.5 seconds / fit</td><td>4.5 seconds</td></tr><tr><td>Parallel GP Evolution</td><td>DEAP Engine (50 Gens)</td><td>0.82 ms / individual</td><td>38.5 minutes</td></tr><tr><td>Stage 1 Semantic Judge</td><td>Llama-3.2-3B (8-bit Quant)</td><td>138 ms / expression</td><td>6.9 seconds</td></tr><tr><td>Stage 2 Domain Mutator</td><td>Gemma-2-2B (8-bit Quant)</td><td>295 ms / expression</td><td>7.4 seconds</td></tr><tr><td>AST Compilation Guard</td><td>Python AST + Numba</td><td>0.45 ms / tree</td><td>0.02 seconds</td></tr><tr><td>Total System Pipeline</td><td>Full End-to-End Cycle</td><td>--</td><td>38.8 minutes</td></tr></table>",
+        "bbox": [
+            513,
+            112,
+            935,
+            181
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "Because Llama-3.2-3B and Gemma-2-2B are instantiated locally via 8-bit quantized weights, VRAM consumption peaks at only 4.2 GB and 3.8 GB respectively. The combined LLM refinement stage processes 50 top candidates in under 15 seconds, incurring zero financial API costs, zero data exfiltration risk, and offering 100% deterministic reproducibility via greedy decoding (T = 0.0).",
+        "bbox": [
+            508,
+            209,
+            940,
+            318
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "J. CROSS-MARKET ROBUSTNESS: US AND CHINESE MARKETS",
+        "text_level": 2,
+        "bbox": [
+            510,
+            333,
+            892,
+            363
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "To evaluate whether the proposed Two-Stage LLM Refiner mitigates out-of-sample degradation and semantic overfitting across foreign market structures, the architecture was trained and evaluated from scratch on US Equities (S&P 500) and Chinese Equities (SSE Composite).",
+        "bbox": [
+            508,
+            365,
+            940,
+            443
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "table",
+        "img_path": "images/16320a7b895cf5ab1c396dd7b5ba1d65cc9ee416b8d996afec3a014ccbec13f2.jpg",
+        "table_caption": [
+            "TABLE 9. Cross-Market Generalization & Degradation Mitigation (IS: 2002–2018, OOS: 2019–2025)."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Market</td><td>Architecture</td><td>IS Sharpe</td><td>OOS Sharpe</td><td>Degradation</td></tr><tr><td rowspan=\"3\">US S&amp;P 500</td><td>Vanilla GP</td><td>1.393</td><td>0.905</td><td>-35.03%</td></tr><tr><td>HMM Regime-GP</td><td>1.228</td><td>0.974</td><td>-20.71%</td></tr><tr><td>Proposed Framework</td><td>1.153</td><td>1.075</td><td>-6.77%</td></tr><tr><td rowspan=\"3\">China SSE</td><td>Vanilla GP</td><td>0.436</td><td>0.035</td><td>-92.08%</td></tr><tr><td>HMM Regime-GP</td><td>0.633</td><td>0.232</td><td>-63.28%</td></tr><tr><td>Proposed Framework</td><td>0.126</td><td>0.067</td><td>-46.68%</td></tr><tr><td rowspan=\"3\">India Nifty 50</td><td>Vanilla GP</td><td>0.954</td><td>0.5518</td><td>-42.16%</td></tr><tr><td>HMM Regime-GP</td><td>0.814</td><td>0.5244</td><td>-35.62%</td></tr><tr><td>Proposed Framework</td><td>0.957</td><td>0.6365</td><td>-33.49%</td></tr></table>",
+        "bbox": [
+            513,
+            494,
+            935,
+            590
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "As documented in Table 9, in the highly efficient US market (S&P 500), Vanilla GP suffered a −35.03% degradation drop. Pure mathematical HMM routing reduced this to −20.71%. When the proposed Two-Stage LLM Refiner was deployed, the degradation drop was curtailed to -6.77%, while delivering a peak OOS Sharpe of 1.075. In the noisy Chinese SSE market, our proposed framework halved the degradation collapse (−46.68% vs −92.08%).",
+        "bbox": [
+            508,
+            606,
+            940,
+            730
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "V. DISCUSSION",
+        "text_level": 2,
+        "bbox": [
+            510,
+            745,
+            635,
+            759
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "A. ECONOMIC INTERPRETATION",
+        "text_level": 2,
+        "bbox": [
+            510,
+            760,
+            755,
+            776
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "The empirical superiority of the proposed framework aligns directly with the Adaptive Markets Hypothesis [15], which asserts that financial market efficiency is not stationary, but evolves dynamically across changing competitive landscapes and macroeconomic regimes. The Adaptive Fusion Model (AFM) captures slow-moving fundamental valuation dynamics and broad macroeconomic news sentiment, establishing an overarching macroeconomic anchor. In parallel, the Gaussian HMM module identifies high-frequency market volatility transitions, isolating periods of liquidity contraction.",
+        "bbox": [
+            508,
+            778,
+            940,
+            933
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccesS\"",
+        "bbox": [
+            59,
+            15,
+            220,
+            38
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            470,
+            35,
+            937,
+            49
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "10",
+        "bbox": [
+            60,
+            942,
+            78,
+            952
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            847,
+            941,
+            937,
+            953
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "Conditioning symbolic GP evolution on these latent states enables the discovery of specialized alpha expressions tailored to specific market environments. In expansionary bull regimes, the evolutionary engine selects positive feedback momentum formulas that ride institutional capital flows. In high-volatility turbulence regimes, the engine shifts toward conservative balance-sheet metrics (P/E ratio, debt-to-equity) and short-term mean-reversion operators that capitalize on liquidity overreaction.",
+        "bbox": [
+            55,
+            76,
+            486,
+            214
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "B. FORMULA INTERPRETABILITY AND QUALITATIVE CASE STUDIES",
+        "text_level": 2,
+        "bbox": [
+            57,
+            228,
+            480,
+            257
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "The primary structural breakthrough of the Two-Stage LLM Semantic Refiner is its ability to enforce domain economic reasoning without manual, brittle rule crafting. Standard evolutionary algorithms optimize mathematical fitness blindly, frequently assembling expressions that are dimensionally incoherent or economically ungrounded. The closedvocabulary mutator resolves these pathologies by performing targeted subtree rewrites under a domain-constrained grammar.",
+        "bbox": [
+            55,
+            259,
+            484,
+            396
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "To illustrate the concrete mechanics of the semantic repair process, we examine three representative case studies from our empirical validation:",
+        "bbox": [
+            55,
+            396,
+            484,
+            441
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "1) Periodic Artifact Removal:",
+        "text_level": 2,
+        "bbox": [
+            57,
+            442,
+            282,
+            456
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "Raw Flawed Tree $( S = 1 / 5 ) { \\mathopen : } T _ { \\mathrm { r a w } } = \\mathrm { a d d } { \\bigl ( } \\log ( \\mathrm { v o l } _ { - } 5 \\mathrm { d } )$ , sin(price Judge Audit: The function sin(·) maps a bounded valuation ratio to a periodic oscillation $[ - 1 , 1 ]$ , which is economically ungrounded for equity trends. Gemma-2-2B Repaired Alpha $( S = 4 / 5 ) \\colon T _ { \\mathrm { m u t } } = \\mathrm { d i v } \\left( \\mathrm { r e t \\_ 2 0 d , t s \\_ m e a n ( v o l \\_ 2 0 d , 2 0 ) } \\right)$ . Economic Rationale: Replaced periodic sine with a riskadjusted momentum ratio, scaling returns by volatility.",
+        "bbox": [
+            55,
+            456,
+            510,
+            565
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "2) Dimensional Inconsistency Repair:",
+        "text_level": 2,
+        "bbox": [
+            57,
+            563,
+            340,
+            578
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "Raw Flawed Tree $( S = 1 / 5 ) \\colon T _ { \\mathrm { r a w } } = { \\mathrm { s u b } } { \\big ( } { \\mathrm { c l o s e } } , { \\mathrm { v o l u m e } } { \\big ) }$ Judge Audit: Dimensional violation; subtracting trading volume $( 1 0 ^ { 6 }$ shares) from price $( 1 0 ^ { 2 }$ currency) is economically nonsensical. Gemma-2-2B Repaired Alpha $~ ( S ~ = ~ 5 / 5 ) \\colon$ $T _ { \\mathrm { m u t } } = ( \\mathrm { c l o s e - t s \\_ m e a n ( c l o s e , 2 0 ) } ) / \\mathrm { t s \\_ s t d ( c l o s e , 2 0 ) }$ . Economic Rationale: Transformed the invalid difference into a standardized price z-score (Bollinger oscillator).",
+        "bbox": [
+            55,
+            578,
+            484,
+            686
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "3) High-Frequency Noise Smoothing:",
+        "text_level": 2,
+        "bbox": [
+            57,
+            686,
+            338,
+            700
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "Raw Flawed Tree $( S = 2 / 5 ) { \\mathopen : } T _ { \\mathrm { r a w } } = \\mathrm { m u l } \\big ( \\cos ( \\mathrm { p e \\_ r a t i o } )$ , ret\\_5d\u0001 Judge Audit: Modulating P/E multiples with cosine oscillations creates spurious noise overfit to sample history. Gemma-2-2B Repaired Alpha $\\begin{array} { r c l c r } { ( S } & { = } & { 4 / 5 ) \\colon { \\cal T } _ { \\mathrm { m u t } } } & { = } \\end{array}$ div\u0000pe\\_ratio, ts\\_mean(pe\\_ratio, 60)\u0001. Economic Rationale: Rewritten into a relative valuation metric, identifying stocks trading at an attractive discount relative to their 60-day mean.",
+        "bbox": [
+            55,
+            700,
+            510,
+            810
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "C. FAILURE MODE AND SAFE FALLBACK VERIFICATION ARCHITECTURE",
+        "text_level": 2,
+        "bbox": [
+            57,
+            822,
+            460,
+            852
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "To guarantee production robustness, the framework enforces a two-tiered defensive validation guard: (1) Tier 1 (Syntactic & Lexical Guard): Each mutated expression is parsed into an Abstract Syntax Tree (AST). Expressions with undeclared variables, undefined calls, or tokens outside the closed vocabulary $ { \\boldsymbol { \\nu } } _ { } = (  { \\boldsymbol { F } } ,  { \\boldsymbol { O } } )$ are immediately rejected. (2) Tier 2 (Empirical Health Guard): Repaired formulas are evaluated on the validation slice; any candidate with non-positive rank IC (Rank $\\mathrm { I C } _ { \\mathrm { v a l } } \\le 0 )$ is discarded. If both tiers fail, the pipeline safely falls back to verified alphas. Across all 1,729 outof-sample evaluation days, 100% of deployed expressions compiled without runtime exception.",
+        "bbox": [
+            55,
+            855,
+            486,
+            930
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            508,
+            75,
+            940,
+            184
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "D. INSTITUTIONAL SCALABILITY AND MARKET MICROSTRUCTURE",
+        "text_level": 2,
+        "bbox": [
+            510,
+            199,
+            857,
+            228
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "From an institutional deployment perspective, strategy capacity is bounded by execution liquidity. Applying the Almgren-Chriss square-root impact model [36]: $\\Delta P _ { \\mathrm { i m p a c t } } ~ \\approx ~ \\eta$ $\\sigma \\cdot \\sqrt { V _ { \\mathrm { o r d e r } } / V _ { \\mathrm { d a i l y } } }$ , with permanent impact parameter η ≈ 0.142 for large-cap Indian equities and median daily turnover $ { V _ { \\mathrm { d a i l y } } } ~ \\approx ~ \\mathfrak { H } 4 2  { \\mathbf { M } }$ , we estimate strategy capacity at approximately \\$250M under the 20-day rebalance cycle before market impact degrades net annualized alpha by more than 10%.",
+        "bbox": [
+            508,
+            232,
+            940,
+            356
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "E. LIMITATIONS",
+        "text_level": 2,
+        "bbox": [
+            510,
+            370,
+            635,
+            387
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "The framework has several identifiable limitations: (1) forward-filling annual fundamental indicators introduces accounting reporting lag, which, while necessary to prevent look-ahead bias, limits responsiveness to rapid balance-sheet $\\operatorname { r g v i s i o n s 2 0 } _ { \\mathrm { ~ S m a 2 0 } } ( { \\mathord { \\uparrow } } ) .$ extending the framework beyond large caps (e.g., to illiquid small-cap equities) warrants adaptive liquid ity haircuts and turnover penalties; and (3) prompt sensitivity in Stage 1 scoring is mitigated, but not eliminated, by deterministic greedy decoding $( T = 0 . 0 )$",
+        "bbox": [
+            510,
+            388,
+            940,
+            529
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "VI. CONCLUSION",
+        "text_level": 2,
+        "bbox": [
+            510,
+            543,
+            645,
+            558
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "This paper introduced a quantitative factor discovery framework fusing an Adaptive Fusion Model (AFM), Hidden Markov Model (HMM), and Genetic Programming (GP) with a Two-Stage LLM Semantic Refiner. Across a 23-year panel of Indian Equities (Nifty 50, 2002–2025), the framework elevated out-of-sample annualized net returns from the 8.41% quantitative baseline to 9.61% deterministic / 10.63% peak return (Sharpe 0.6365–0.6465). Crucially, the refiner substantially mitigated out-of-sample performance degradation, compressing degradation on the US S&P 500 to -6.77% and halving degradation on Chinese Equities (−46.68%). Future research directions include domain-specific LoRA finetuning of Gemma-2B on quantitative formulas, multi-agent consensus scoring (Llama-3B and Qwen-3B), and scaling to broad-market universes (NSE 500, Russell 2000).",
+        "bbox": [
+            508,
+            560,
+            940,
+            791
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "REFERENCES",
+        "text_level": 2,
+        "bbox": [
+            513,
+            806,
+            612,
+            820
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "ref_text",
+        "text": "[1] Z. Kakushadze, ‘‘101 formulaic alphas,’’ Wilmott, vol. 2016, no. 84, pp. 72–81, 2016.",
+        "bbox": [
+            519,
+            824,
+            935,
+            847
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "ref_text",
+        "text": "[2] S. Gu, B. Kelly, and D. Xiu, ‘‘Empirical asset pricing via machine learning,’’ The Review ofFinancial Studies, vol. 33, no. 5, pp. 2223–2273, 2020.",
+        "bbox": [
+            520,
+            849,
+            937,
+            872
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "ref_text",
+        "text": "[3] T. Fischer and C. Krauss, ‘‘Deep learning with long short-term memory networks for financial market predictions,’’ European Journal of Opera tional Research, vol. 270, no. 2, pp. 654–669, 2018.",
+        "bbox": [
+            520,
+            872,
+            935,
+            906
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "ref_text",
+        "text": "[4] L. Chen, M. Pelger, and J. Zhu, ‘‘Deep learning in asset pricing,’’ Management Science, vol. 70, no. 2, pp. 714–750, 2024.",
+        "bbox": [
+            520,
+            907,
+            937,
+            930
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            57,
+            35,
+            527,
+            49
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccess",
+        "bbox": [
+            774,
+            15,
+            935,
+            38
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            57,
+            941,
+            149,
+            953
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "page_number",
+        "text": "11",
+        "bbox": [
+            918,
+            942,
+            937,
+            953
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "ref_text",
+        "text": "[5] M. López de Prado, Advances in Financial Machine Learning. John Wiley & Sons, 2018.",
+        "bbox": [
+            65,
+            78,
+            482,
+            101
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[6] C. R. Harvey, Y. Liu, and H. Zhu, ‘‘. . . and the cross-section of expected returns,’’ The Review ofFinancial Studies, vol. 29, no. 1, pp. 5–68, 2016.",
+        "bbox": [
+            67,
+            102,
+            482,
+            124
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[7] J. R. Koza, Genetic Programming: On the Programming of Computers by Means ofNatural Selection. MIT Press, 1992.",
+        "bbox": [
+            67,
+            125,
+            482,
+            147
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[8] Y. L. Becker and K. Seshadri, ‘‘GP-based trading rule discovery with regularization,’’ in Proceedings ofthe Genetic and Evolutionary Computation Conference (GECCO), 2003, pp. 1–12.",
+        "bbox": [
+            67,
+            148,
+            482,
+            181
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[9] S.-H. Chen and C.-H. Yeh, ‘‘Evolving traders and the business school with genetic programming,’’ Journal of Economic Dynamics and Control, vol. 25, no. 3-4, pp. 363–393, 2001.",
+        "bbox": [
+            65,
+            182,
+            482,
+            216
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[10] M. Kampouridis and F. E. Otero, ‘‘Evolving trading strategies using directional changes,’’ Expert Systems with Applications, vol. 73, pp. 145–160, 2017.",
+        "bbox": [
+            60,
+            216,
+            482,
+            250
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[11] S. Tang, J. Sun, and Y. Li, ‘‘AlphaAgent: Automated alpha factor discovery through multimodal LLM agents,’’ arXiv preprint arXiv:2502.16789, 2025.",
+        "bbox": [
+            60,
+            251,
+            482,
+            283
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[12] Y. Chen and H. Qi, ‘‘TEDE: A four-stage LLM-assisted semantic pruning framework for genetic programming alpha mining,’’ Applied Sciences, vol. 16, no. 12, Art. no. 6231, 2026.",
+        "bbox": [
+            60,
+            285,
+            482,
+            319
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[13] W. Lohpetch and D. Corne, ‘‘Outperforming buy-and-hold with evolved technical trading rules,’’ in Applications of Evolutionary Computation. Springer, 2010, pp. 171–181.",
+        "bbox": [
+            60,
+            320,
+            482,
+            354
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[14] F.-A. Fortin, F.-M. De Rainville, M.-A. Gardner, M. Parizeau, and C. Gagné, ‘‘DEAP: Evolutionary algorithms made easy,’’ Journal of Machine Learning Research, vol. 13, pp. 2171–2175, 2012.",
+        "bbox": [
+            60,
+            355,
+            482,
+            388
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[15] A. W. Lo, ‘‘The adaptive markets hypothesis,’’ The Journal of Portfolio Management, vol. 30, no. 5, pp. 15–29, 2004.",
+        "bbox": [
+            60,
+            388,
+            482,
+            411
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[16] J. D. Hamilton, ‘‘A new approach to the economic analysis of nonstationary time series and the business cycle,’’ Econometrica, vol. 57, no. 2, pp. 357– 384, 1989.",
+        "bbox": [
+            60,
+            413,
+            482,
+            445
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[17] L. R. Rabiner, ‘‘A tutorial on hidden Markov models and selected applications in speech recognition,’’ Proceedings of the IEEE, vol. 77, no. 2, pp. 257–286, 1989.",
+        "bbox": [
+            60,
+            446,
+            482,
+            480
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[18] A. Ang and G. Bekaert, ‘‘International asset allocation with regime shifts,’’ The Review ofFinancial Studies, vol. 15, no. 4, pp. 1137–1187, 2002.",
+        "bbox": [
+            60,
+            480,
+            482,
+            503
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[19] M. Guidolin and A. Timmermann, ‘‘Asset allocation under multivariate regime switching,’’ Journal of Economic Dynamics and Control, vol. 31, no. 11, pp. 3503–3544, 2007.",
+        "bbox": [
+            60,
+            503,
+            482,
+            538
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[20] P. Nystrup, H. Madsen, and E. Lindström, ‘‘Dynamic portfolio optimization across hidden market regimes,’’ Quantitative Finance, vol. 18, no. 1, pp. 83–95, 2018.",
+        "bbox": [
+            60,
+            539,
+            482,
+            572
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[21] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, ‘‘Attention is all you need,’’ in Advances in Neural Information Processing Systems (NeurIPS), 2017, pp. 5998–6008.",
+        "bbox": [
+            60,
+            572,
+            482,
+            608
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[22] B. Romera-Paredes, M. Barekatain, A. Novikov, M. Balog, M. P. Kumar, E. Dupont, F. J. Ruiz, J. S. Ellenberg, P. Wang, O. Fawzi, and P. Kohli, ‘‘Mathematical discoveries from program search with large language models,’’ Nature, vol. 625, no. 7995, pp. 468–475, 2024.",
+        "bbox": [
+            60,
+            608,
+            482,
+            654
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[23] E. Hemberg, S. Kelly, and U.-M. O’Reilly, ‘‘LLMs as evolutionary operators in genetic programming,’’ Genetic Programming and Evolvable Machines, vol. 25, no. 1, pp. 1–28, 2024.",
+        "bbox": [
+            60,
+            654,
+            482,
+            687
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[24] S. Yuan, H. Chen, and W. Zhang, ‘‘Alpha-GPT 2.0: Human-in-the-loop alpha factor discovery with interactive language agents,’’ arXiv preprint arXiv:2402.09746, 2024.",
+        "bbox": [
+            60,
+            687,
+            484,
+            722
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[25] Z. Sun and K. Shi, ‘‘Two-stage AST semantic repair operator for heuristic evolutionary program synthesis,’’ arXiv preprint arXiv:2604.16420, 2026.",
+        "bbox": [
+            60,
+            723,
+            482,
+            745
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[26] E. F. Fama and K. R. French, ‘‘The cross-section of expected stock returns,’’ The Journal ofFinance, vol. 47, no. 2, pp. 427–465, 1992.",
+        "bbox": [
+            60,
+            746,
+            482,
+            768
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[27] M. M. Carhart, ‘‘On persistence in mutual fund performance,’’ The Journal ofFinance, vol. 52, no. 1, pp. 57–82, 1997.",
+        "bbox": [
+            60,
+            769,
+            482,
+            792
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[28] N. Jegadeesh and S. Titman, ‘‘Returns to buying winners and selling losers: Implications for stock market efficiency,’’ The Journal ofFinance, vol. 48, no. 1, pp. 65–91, 1993.",
+        "bbox": [
+            60,
+            792,
+            482,
+            826
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[29] R. D. McLean and J. Pontiff, ‘‘Does academic research destroy stock return predictability?\" The Journal of Finance, vol. 71, no. 1, pp. 5–32, 2016.",
+        "bbox": [
+            60,
+            826,
+            484,
+            849
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[30] K. Hou, C. Xue, and L. Zhang, ‘‘Replicating anomalies,’’ The Review of Financial Studies, vol, 33, no. 5, pp. 2019–2133, 2020.",
+        "bbox": [
+            60,
+            849,
+            484,
+            872
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[31] J. Bollen, H. Mao, and X. Zeng, ‘‘Twitter mood predicts the stock market,’’ Journal ofComputational Science, vol. 2, no. 1, pp. 1–8, 2011.",
+        "bbox": [
+            60,
+            873,
+            482,
+            895
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[32] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, ‘‘BERT: Pre-training of deep bidirectional transformers for language understanding,’’ in NAACL-HLT, 2019, pp. 4171–4186.",
+        "bbox": [
+            60,
+            896,
+            482,
+            930
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[33] M. Motghare, M. Agarwal, and A. Agrawal, ‘‘NewsSumm: The world’s largest human-annotated multi-document news summarization dataset for Indian English,’’ Computers, vol. 14, no. 12, Art. no. 508, 2025.",
+        "bbox": [
+            513,
+            78,
+            937,
+            113
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[34] B. K. Petersen, M. L. Larma, T. N. Mundhenk, C. P. Santiago, S. K. Kim, and J. T. Kim, ‘‘Deep symbolic regression: Recovering mathematical expressions from data via risk-seeking policy gradients,’’ in Proceedings of the International Conference on Learning Representations (ICLR), 2021.",
+        "bbox": [
+            513,
+            113,
+            937,
+            159
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[35] T. N. Mundhenk, M. L. Landajuela, R. Glatt, C. P. Santiago, D. M. Faissol, and B. K. Petersen, ‘‘Symbolic regression via neural-guided genetic programming population seeding,’’ in Advances in Neural Information Processing Systems (NeurIPS), vol. 34, 2021, pp. 24 960–24 973.",
+        "bbox": [
+            513,
+            159,
+            937,
+            205
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[36] R. Almgren and N. Chriss, ‘‘Optimal execution of portfolio transactions,’’ Journal of Risk, vol. 3, no. 2, pp. 5–40, 2000.",
+        "bbox": [
+            513,
+            205,
+            935,
+            228
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "ref_text",
+        "text": "[37] H. White, ‘‘A reality check for data snooping,’’ Econometrica, vol. 68, no. 5, pp. 1097–1126, 2000.",
+        "bbox": [
+            513,
+            228,
+            935,
+            251
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "image",
+        "img_path": "images/5c0699b6596fbda008d867190a140e7a93dde191b609f3beaa28ce350f2f58d2.jpg",
+        "image_caption": [],
+        "image_footnote": [
+            "FIRST AUTHOR received the B.Tech. degree in Computer Science and Engineering. His research interests include quantitative financial modeling, genetic programming, and the intersection of neuro-symbolic artificial intelligence with financial time series."
+        ],
+        "content": "",
+        "bbox": [
+            515,
+            346,
+            640,
+            462
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "image",
+        "img_path": "images/94be68791a6c40ed112885cfd40206af894ad1416f4f065e4d0abc6d77492154.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            513,
+            544,
+            640,
+            661
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "SECOND AUTHOR received the M.Tech. degree in Artificial Intelligence and Data Science. His research focuses on large language model alignment, semantic verification, and automated factor engineering.",
+        "bbox": [
+            654,
+            543,
+            937,
+            606
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "image",
+        "img_path": "images/83d9cadd7a07c51146e60daf9d8b5a9e65499d3336f3db006dce41dcc3a3207a.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            515,
+            746,
+            640,
+            864
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "THIRD AUTHOR is an Associate Professor specializing in quantitative finance and algorithmic portfolio optimization. He has published extensively on market microstructure and regimeswitching models.",
+        "bbox": [
+            652,
+            745,
+            937,
+            809
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "header",
+        "text": "IEEEAccesS",
+        "bbox": [
+            60,
+            15,
+            218,
+            38
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "header",
+        "text": "Author et al.: Fusing Two-Stage LLM Semantic Refinement with Genetic Programming",
+        "bbox": [
+            470,
+            35,
+            937,
+            49
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "page_number",
+        "text": "12",
+        "bbox": [
+            60,
+            942,
+            78,
+            952
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "footer",
+        "text": "VOLUME 11, 2023",
+        "bbox": [
+            847,
+            941,
+            937,
+            953
+        ],
+        "page_idx": 11
+    }
+]

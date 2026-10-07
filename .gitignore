@@ -93,6 +93,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Generated run results (restored at startup, not source)
+backend/results.json
+frontend/build.log
+
 # Frameworks / Builds
 .next/
 out/

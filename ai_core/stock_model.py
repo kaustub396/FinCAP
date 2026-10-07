@@ -359,7 +359,8 @@ class RegimeDetector:
     def fit(self, index_df):
         features = self._compute_index_features(index_df)
         self.feature_means = features.mean()
-        self.feature_stds = features.std()
+        # Zero-variance guard: keep std==0 features from producing NaN (0/0)
+        self.feature_stds = features.std().replace(0, 1.0)
         X = (features - self.feature_means) / self.feature_stds
 
         self.model = GaussianHMM(
